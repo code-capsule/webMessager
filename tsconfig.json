@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@easiclass/web-service": ["packages/webService/src/index.ts"],
+            "@easiclass/messager": ["packages/messager/src/index.ts"]
+        }
+    }
+}

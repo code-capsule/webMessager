@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script type="module">
+        import WebService from "@easiclass/easiclass-web-service";
+
+        function init() {
+            const iframeWebService = WebService('iframe');
+            iframeWebService.on('common.requestFunctions', () => {
+                iframeWebService.send({
+                    type:'common.requestFunctions',
+                    data: {
+                        body: {
+                            functions: ['common.requestFunctions']
+                        }
+                    }
+                })
+            });
+        }
+
+        init();
+    </script>
+</body>
+</html>
