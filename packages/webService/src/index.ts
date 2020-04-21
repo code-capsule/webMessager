@@ -3,33 +3,41 @@ import { remove } from 'lodash';
 import IMessager from './IMessager'; 
 import { Message, MessageListener } from './types'
 
+interface ServiceOption {
+    messager: IMessager
+}
 class WebService {
     private messager: IMessager;
-    private listeners:Object;
-    private services: Array<string>;
-    constructor({ messager }) {
-        this.init({ messager })
-        this.listeners = {};
-        this.services = [];
+    private listeners: Array<MessageListener> = [];
+    private services: Array<string> = [];
+    private retryQueue: Array<Message> = [];
+
+    constructor(serviceOption: ServiceOption) {
+        const { messager } = serviceOption;
+        this.initMessager(messager)
     }
 
-    init({ messager }) {
+    private initMessager(messager: IMessager): void {
         this.messager = messager;
-        this.messager.bindReceiveMessageHandler(this.handleReceiveMessage.bind(this));
-        setTimeout(() => {
-            this.fetchServices();
-        });
+
+        this.messager.onReceiveMessage(this.handleReceiveMessage.bind(this));
+        this.messager.onready = () => {
+            this.startRetryRequest();
+        }
+        
+        this.fetchServices();
             
     }
 
     /**
      * 发现可用服务
      */
-    async fetchServices() {
-        const data  = await this.request({ 
+    async fetchServices(): Promise<Array<string>> {
+        const response  = await this.request({ 
             type: this.messager.getCheckServiceType(),
         });
-        this.services = data.body.functions;
+        this.services = response.data.body.functions;
+        return this.services;
     }
 
     /**
@@ -39,6 +47,17 @@ class WebService {
      */
     checkServiceAvailable(type) {
         return this.services.indexOf(type) !== -1;
+    }
+
+    /**
+     * 开始执行请求重发队列
+     */
+    startRetryRequest() {
+        const retryQueue = this.retryQueue.slice();
+        this.retryQueue = [];
+        retryQueue.forEach(message => {
+            this.send(message);
+        })
     }
 
     /**
@@ -98,7 +117,7 @@ class WebService {
     }
 
     /**
-     * 发起请求
+     * 发送消息
      * @param {object} config 请求信息
      */
     send(message: Message):Message {
@@ -116,16 +135,15 @@ class WebService {
         if (!headers.reqId) {
             headers.reqId = uuid();
         }
-        const finalMessage = {
-            type,
-            headers,
-            data
+        const isSuccess: boolean = this.messager.sendAction({type, headers, data});
+        if (!isSuccess) {
+            this.retryQueue.push({type, headers, data});
+            console.log('[webservice]client is not ready, request wait for sending', {type, headers, data});
+        } else {
+            console.log('[webService]send action', {type, headers, data});
         }
-        
-        this.messager.sendAction(finalMessage);
-        console.log('[webService]send action', finalMessage);
 
-        return finalMessage;
+        return {type, headers, data};
     }
 
     /**
@@ -133,11 +151,11 @@ class WebService {
      * @param {Message} message 请求信息
      * @return {Promise}
      */
-    request(message: Message):Promise<object> {
+    request(message: Message):Promise<Message> {
         return new Promise((resolve, reject) => {
             const req = this.send(message);
             this.on(message.type, {
-                callback: (data:object) => {
+                callback: (data:Message) => {
                     resolve(data)
                 }, 
                 reqId: req.headers.reqId,
@@ -178,7 +196,7 @@ class WebService {
      * @param {监听事件类型} type 
      * @param {监听器属性} messageListener 不传则移除对应事件全部监听器，可指定 callback 或 id 进行移除
      */
-    off(type, messageListener: MessageListener) {
+    off(type: string, messageListener: MessageListener) {
         if (!messageListener) {
             delete this.listeners[type];
         }
