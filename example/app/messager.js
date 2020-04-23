@@ -7,7 +7,7 @@ class Messager  {
         return 'common.requestFunctions';
     }
 
-    bindReceiveMessageHandler(messageHandler) {
+    onReceiveMessage(messageHandler) {
        window.addEventListener('message', (e)=> {
            e.data.headers && messageHandler(e.data);
         }) 

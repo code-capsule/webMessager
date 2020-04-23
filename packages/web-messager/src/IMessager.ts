@@ -1,10 +1,25 @@
-import { Message } from './types';
+
+export interface Message {
+    type:string,
+    headers?: {
+        reqId: string
+    },
+    data?: {
+        code?:number,
+        body?:object,
+    }
+}
+
 /**
  * webview通讯器接口类
  */
 
 interface IMessager {
-
+    
+    /**
+     * 通讯通道初始化成功后回调
+     */
+    onready?: Function;
     /**
      * 发送消息接口
      */
@@ -20,11 +35,6 @@ interface IMessager {
      * 返回服务发现的命令类型
      */
     getCheckServiceType():string;
-
-    /**
-     * 通讯通道初始化成功后回调
-     */
-    onready(): void;
 }
 
 export default IMessager;

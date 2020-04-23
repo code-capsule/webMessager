@@ -1,7 +1,7 @@
 import uuid from 'uuid';
-import { remove } from 'lodash';
-import IMessager from './IMessager'; 
-import { Message, MessageListener } from './types'
+import { remove, merge } from 'lodash';
+import { IMessager, Message } from '@easiclass/web-messager'; 
+import { MessageListener } from './types';
 
 interface ServiceOption {
     messager: IMessager
@@ -67,7 +67,6 @@ class WebService {
         const {
             type,
             headers,
-            data
         } = message;
 
         console.log('[webService]receive message', message);
@@ -77,23 +76,37 @@ class WebService {
         }
 
         const { reqId } = headers;
-        this._handleOnceListeners(eventListeners, reqId, data);
-        this._handleNormalListeners(eventListeners, reqId, data);  
+        const ctx = {
+            ...message,
+            end: (response: Message) => {
+                merge(response, {
+                    headers: {
+                        reqId
+                    },
+                    type
+                });
+                this.send(response);
+            }
+        }
+        this._handleOnceListeners(eventListeners, ctx);
+        this._handleNormalListeners(eventListeners, ctx);  
     }
 
     /**
      * 处理一次性事件监听器（执行和移除）
      * @param {事件监听器数组} eventListeners 
-     * @param {需要匹配的reqId} reqId  不传则不考虑匹配reqId 
+     * @param {消息上下文} ctx
      */
-    _handleOnceListeners(eventListeners, reqId, data) {
+    _handleOnceListeners(eventListeners, ctx) {
+        const { headers, data } = ctx;
+        const { reqId } = headers;
         const onceListeners = remove(eventListeners, (listener:MessageListener) => {
             const isReqMatch = (listener.reqId && listener.reqId === reqId) || !listener.reqId 
             return listener.once && isReqMatch;
         });
 
         onceListeners.forEach(listener => {
-            listener.callback && listener.callback(data);
+            listener.callback && listener.callback(data, ctx);
         })
     }
 
@@ -101,17 +114,19 @@ class WebService {
     /**
      * 处理普通事件监听器（执行）
      * @param {事件监听器数组} eventListeners 
-     * @param {需要匹配的reqId} reqId  不传则不考虑匹配reqId 
+     * @param {消息上下文} ctx
      */
-    _handleNormalListeners(eventListeners, reqId, data) {
+    _handleNormalListeners(eventListeners, ctx) {
+        const { headers, data } = ctx;
+        const { reqId } = headers;
         eventListeners.forEach(listener => {
             if (!listener.reqId) {
-                listener.callback && listener.callback(data);
+                listener.callback && listener.callback(data, ctx);
                 return;
             }
 
             if (listener.reqId === reqId) {
-                listener.callback && listener.callback(data);
+                listener.callback && listener.callback(data, ctx);
             }
         });
     }
@@ -162,6 +177,33 @@ class WebService {
                 once: true 
             });
         })
+    }
+
+    /**
+     * 监听请求类型的消息，并回复
+     * @param {string} type 监听事件类型 
+     * @param {function} callback 监听器回调函数
+     * @param {MessageListener} 完整监听器
+     */
+    response(type:string, arg: Function | MessageListener) {
+        if(!this.listeners[type]) {
+            this.listeners[type] = [];
+        }
+
+        let messageListener: MessageListener;
+
+        if (typeof arg === 'function') {
+            messageListener = {
+                callback: arg,
+                reqId: '',
+                once: false
+            }
+        } else {
+            messageListener = arg
+        }
+        
+
+        this.listeners[type].push(messageListener);
     }
     
     /**

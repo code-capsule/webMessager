@@ -1,17 +1,27 @@
 {
-  "name": "webServiceProject",
+  "name": "web-service",
   "version": "1.0.0",
   "main": "index.js",
   "author": "alex",
   "license": "MIT",
+  "scripts": {
+    "build": "gulp build",
+    "watch": " gulp watch",
+    "link": "cd example && npm run link",
+    "dev": "lerna bootstrap && cd example && npm run dev"
+  },
   "dependencies": {
     "@babel/core": "^7.6.4",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/plugin-transform-class-properties": "^",
     "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.6.3",
     "@babel/preset-typescript": "^7.6.0",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
     "lerna": "^3.20.2"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.8.3"
   }
 }

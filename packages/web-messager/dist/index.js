@@ -27,3 +27,15 @@ Object.keys(_webviewMessager).forEach(function (key) {
     }
   });
 });
+
+var _IMessager = require("./IMessager");
+
+Object.keys(_IMessager).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _IMessager[key];
+    }
+  });
+});

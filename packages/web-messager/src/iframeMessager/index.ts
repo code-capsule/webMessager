@@ -2,7 +2,7 @@
  * eclass webview通讯器
  */
 
- import IMessager from '@easiclass/web-service/IMessager';
+ import IMessager from '../IMessager';
  class Messager implements IMessager {
      constructor() {}
  
@@ -24,4 +24,4 @@
  
  }
  
- export default new Messager()
+ export const iframeMessager = new Messager();

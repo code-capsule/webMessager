@@ -13,14 +13,14 @@ try {
 } catch (e) {
   babelConfig = {};
   babelConfig.presets = [
+    "@babel/typescript",
     ["@babel/preset-env", {
         "targets": {
             "browsers": [">0.25%", "ie > 10"]
         },
     }],
-    "@babel/typescript"
   ];
-  babelConfig.plugins = ['@babel/plugin-transform-runtime','@babel/plugin-syntax-dynamic-import']
+  babelConfig.plugins = ['@babel/plugin-proposal-class-properties','@babel/plugin-transform-runtime','@babel/plugin-syntax-dynamic-import']
 }
 
 
@@ -72,7 +72,7 @@ function watch() {
 
   const paths = {
     scripts: {
-      src: path.join(rootPath, '*/src/**/*.ts'),
+      src: path.join(rootPath, '**/src/**/*.ts'),
     },
   };
 

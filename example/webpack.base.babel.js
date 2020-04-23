@@ -51,18 +51,18 @@ module.exports = options => ({
         modules: ['node_modules', 'app'],
         extensions: ['.js', '.jsx', '.react.js', '.ts', '.tsx'],
         // mainFields: ['browser', 'jsnext:main', 'main'],
-        alias: {
-            '@easiclass/web-service': path.join(
-                process.cwd(),
-                '..',
-                'packages/webService/dist/index.js',
-            ),
-            '@easiclass/easiclass-web-service': path.join(
-                process.cwd(),
-                '..',
-                'packages/eclass-web-service/dist/index.js',
-            ),
-        },
+        // alias: {
+        //     '@easiclass/web-service': path.join(
+        //         process.cwd(),
+        //         '..',
+        //         'packages/webService/dist/index.js',
+        //     ),
+        //     '@easiclass/easiclass-web-service': path.join(
+        //         process.cwd(),
+        //         '..',
+        //         'packages/eclass-web-service/dist/index.js',
+        //     ),
+        // },
     },
     devtool: options.devtool,
     devServer: options.devServer,

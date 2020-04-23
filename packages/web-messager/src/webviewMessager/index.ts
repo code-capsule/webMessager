@@ -2,13 +2,13 @@
  * eclass webview通讯器
  */
 
-import IMessager from '@easiclass/web-service/IMessager';
+import IMessager from '../IMessager';
 
 const ECLASS_API = 'eclassExtends';
 class Messager implements IMessager {
     private send: Function;
     public onready: Function;
-    constructor(props) {   
+    constructor() {   
     }
 
     onCreate() {
@@ -42,10 +42,15 @@ class Messager implements IMessager {
 
     sendAction(message) {
         const jsonStr = JSON.stringify(message);
-        window[ECLASS_API].sendAction && window[ECLASS_API].sendAction(jsonStr);
+        if (window[ECLASS_API].sendAction) {
+            window[ECLASS_API].sendAction(jsonStr);
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
 }
 
-export default new Messager()
+export const webviewMessager = new Messager();
