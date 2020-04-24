@@ -25,6 +25,7 @@ function () {
     (0, _classCallCheck2.default)(this, Messager);
     (0, _defineProperty2.default)(this, "send", void 0);
     (0, _defineProperty2.default)(this, "onready", void 0);
+    this.onCreate();
   }
 
   (0, _createClass2.default)(Messager, [{
