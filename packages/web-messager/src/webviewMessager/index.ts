@@ -8,7 +8,8 @@ const ECLASS_API = 'eclassExtends';
 class Messager implements IMessager {
     private send: Function;
     public onready: Function;
-    constructor() {   
+    constructor() { 
+        this.onCreate();  
     }
 
     onCreate() {
