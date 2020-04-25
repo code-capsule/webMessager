@@ -1,11 +1,11 @@
 {
   "name": "@easiclass/web-service",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "dist/index.js",
   "author": "alex",
   "license": "MIT",
   "dependencies": {
-    "@easiclass/web-messager": "1.0.0",
+    "@easiclass/web-messager": "^1.0.2",
     "@types/lodash": "^4.14.144",
     "uuid": "^3.3.3"
   }
