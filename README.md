@@ -15,7 +15,6 @@ import EclassWebService from "@easiclass/eclass-web-service";
 
 // 不指定类型将自动判断环境
 const iframeWebService = new EclassWebService('iframe');
-
 // 推送消息
 iframeWebService.send({
     type: 'common.sayHello',
@@ -27,7 +26,6 @@ iframeWebService.send({
    
 })
 
-
 // 请求式
 const response = await iframeWebService.request({
     type: 'common.sayHello',
@@ -38,10 +36,8 @@ const response = await iframeWebService.request({
     }
 });
 
-
 // 监听消息
 iframeWebService.on('common.requestName', (msg, ctx) => {
-
     // ctx中携带请求的信息，end 方法自动携带消息发起方的reqId和type进行回复
     ctx.end({
         data: {
@@ -52,7 +48,6 @@ iframeWebService.on('common.requestName', (msg, ctx) => {
         }
     })
 });
-    
 `
 
 ## web-service
@@ -86,10 +81,11 @@ class Messager  {
 
 
 }
-`
 
 `
 
+## webservice引入messager
+`
 import WebService from "@easiclass/web-service";
 import customMessager from "./messager";
 
@@ -132,7 +128,5 @@ iframeWebService.on('common.requestName', (msg, ctx) => {
     })
 });
 
-
-}
     
 `
