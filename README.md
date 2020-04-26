@@ -10,7 +10,7 @@
 ## Eclass-web-service
 易课堂消息sdk
 
-`
+```
 import EclassWebService from "@easiclass/eclass-web-service";
 
 // 不指定类型将自动判断环境
@@ -48,7 +48,7 @@ iframeWebService.on('common.requestName', (msg, ctx) => {
         }
     })
 });
-`
+```
 
 ## web-service
 通用消息sdk，不具有具体的通讯通道，需结合@easiclass/web-messager或自定义messager插件（见eclass-web-serice的实现）
@@ -56,7 +56,7 @@ iframeWebService.on('common.requestName', (msg, ctx) => {
 
 
 ### 自定义messager.js
-`
+```
 class Messager  {
     constructor(iframe) {
         this.iframe = iframe;
@@ -82,10 +82,10 @@ class Messager  {
 
 }
 
-`
+```
 
 ## webservice引入messager
-`
+```
 import WebService from "@easiclass/web-service";
 import customMessager from "./messager";
 
@@ -129,4 +129,4 @@ iframeWebService.on('common.requestName', (msg, ctx) => {
 });
 
     
-`
+```
