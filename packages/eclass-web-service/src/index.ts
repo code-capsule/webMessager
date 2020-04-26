@@ -1,5 +1,5 @@
-import WebService from '@easiclass/web-service';
-import { iframeMessager, webviewMessager } from '@easiclass/web-messager';
+import WebService from '@student/web-service';
+import { iframeMessager, webviewMessager } from '@student/web-messager';
 
 
 class EclassWebService {

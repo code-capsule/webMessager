@@ -1,5 +1,5 @@
-import EclassWebService from "@easiclass/eclass-web-service";
-import WebService from "@easiclass/web-service";
+import EclassWebService from "@student/eclass-web-service";
+import WebService from "@student/web-service";
 import customMessager from "./messager"; 
 
 // 使用eclass内置iframe、webview通讯机制

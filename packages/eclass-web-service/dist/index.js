@@ -9,9 +9,9 @@ exports.default = void 0;
 
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
 
-var _webService = _interopRequireDefault(require("@easiclass/web-service"));
+var _webService = _interopRequireDefault(require("@student/web-service"));
 
-var _webMessager = require("@easiclass/web-messager");
+var _webMessager = require("@student/web-messager");
 
 var EclassWebService = function EclassWebService(messagerType) {
   (0, _classCallCheck2.default)(this, EclassWebService);

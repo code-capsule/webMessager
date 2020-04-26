@@ -1,10 +1,10 @@
 {
-  "name": "@easiclass/eclass-web-service",
+  "name": "@student/eclass-web-service",
   "version": "1.0.2",
   "main": "dist/index.js",
   "license": "MIT",
   "dependencies": {
-    "@easiclass/web-messager": "^1.0.2",
-    "@easiclass/web-service": "1.0.0"
+    "@student/web-messager": "1.0.2",
+    "@student/web-service": "1.0.2"
   }
 }
