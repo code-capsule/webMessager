@@ -2,8 +2,9 @@
     "compilerOptions": {
         "baseUrl": ".",
         "paths": {
-            "@student/web-service": ["packages/webService/src/index.ts"],
-            "@student/web-messager": ["packages/messager/src/index.ts"]
+            "@student/eclass-web-service": ["packages/eclass-web-service/src/index.ts"],
+            "@student/web-messager": ["packages/web-messager/src/index.ts"],
+            "@student/web-service": ["packages/web-service/src/index.ts"],
         }
     }
 }

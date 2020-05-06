@@ -8,7 +8,7 @@ interface ServiceOption {
 }
 class WebService {
     private messager: IMessager;
-    private listeners: Array<MessageListener> = [];
+    private listeners: Map<string, Array<MessageListener>> = new Map();
     private services: Array<string> = [];
     private retryQueue: Array<Message> = [];
 
@@ -180,33 +180,6 @@ class WebService {
     }
 
     /**
-     * 监听请求类型的消息，并回复
-     * @param {string} type 监听事件类型 
-     * @param {function} callback 监听器回调函数
-     * @param {MessageListener} 完整监听器
-     */
-    response(type:string, arg: Function | MessageListener) {
-        if(!this.listeners[type]) {
-            this.listeners[type] = [];
-        }
-
-        let messageListener: MessageListener;
-
-        if (typeof arg === 'function') {
-            messageListener = {
-                callback: arg,
-                reqId: '',
-                once: false
-            }
-        } else {
-            messageListener = arg
-        }
-        
-
-        this.listeners[type].push(messageListener);
-    }
-    
-    /**
      * 监听事件
      * @param {string} type 监听事件类型 
      * @param {function} callback 监听器回调函数
@@ -238,19 +211,27 @@ class WebService {
      * @param {监听事件类型} type 
      * @param {监听器属性} messageListener 不传则移除对应事件全部监听器，可指定 callback 或 id 进行移除
      */
-    off(type: string, messageListener: MessageListener) {
-        if (!messageListener) {
+    off(type: string, arg: Function | MessageListener) {
+        if (!arg) {
             delete this.listeners[type];
+            return;
         }
-
-        const { callback, reqId } = messageListener;
-
-        remove(this.listeners[type], (listener:MessageListener) => {
-            return  listener.callback === callback || (listener.reqId && listener.reqId === reqId);
-        })
+        if (typeof arg === 'function') {
+            remove(this.listeners[type], (listener:MessageListener) => {
+                return  listener.callback === arg;
+            })
+        } else {
+            const { callback, reqId } = arg;
+    
+            remove(this.listeners[type], (listener:MessageListener) => {
+                return  listener.callback === callback || (listener.reqId && listener.reqId === reqId);
+            })
+        }
     }
 
-
+    removeAllListeners() {
+        this.listeners = new Map();
+    }
 }
 
 export default WebService;

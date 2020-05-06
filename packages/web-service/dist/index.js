@@ -31,7 +31,7 @@ function () {
   function WebService(serviceOption) {
     (0, _classCallCheck2.default)(this, WebService);
     (0, _defineProperty2.default)(this, "messager", void 0);
-    (0, _defineProperty2.default)(this, "listeners", []);
+    (0, _defineProperty2.default)(this, "listeners", new Map());
     (0, _defineProperty2.default)(this, "services", []);
     (0, _defineProperty2.default)(this, "retryQueue", []);
     var messager = serviceOption.messager;
@@ -277,34 +277,6 @@ function () {
       });
     }
     /**
-     * 监听请求类型的消息，并回复
-     * @param {string} type 监听事件类型 
-     * @param {function} callback 监听器回调函数
-     * @param {MessageListener} 完整监听器
-     */
-
-  }, {
-    key: "response",
-    value: function response(type, arg) {
-      if (!this.listeners[type]) {
-        this.listeners[type] = [];
-      }
-
-      var messageListener;
-
-      if (typeof arg === 'function') {
-        messageListener = {
-          callback: arg,
-          reqId: '',
-          once: false
-        };
-      } else {
-        messageListener = arg;
-      }
-
-      this.listeners[type].push(messageListener);
-    }
-    /**
      * 监听事件
      * @param {string} type 监听事件类型 
      * @param {function} callback 监听器回调函数
@@ -340,16 +312,28 @@ function () {
 
   }, {
     key: "off",
-    value: function off(type, messageListener) {
-      if (!messageListener) {
+    value: function off(type, arg) {
+      if (!arg) {
         delete this.listeners[type];
+        return;
       }
 
-      var callback = messageListener.callback,
-          reqId = messageListener.reqId;
-      (0, _lodash.remove)(this.listeners[type], function (listener) {
-        return listener.callback === callback || listener.reqId && listener.reqId === reqId;
-      });
+      if (typeof arg === 'function') {
+        (0, _lodash.remove)(this.listeners[type], function (listener) {
+          return listener.callback === arg;
+        });
+      } else {
+        var callback = arg.callback,
+            reqId = arg.reqId;
+        (0, _lodash.remove)(this.listeners[type], function (listener) {
+          return listener.callback === callback || listener.reqId && listener.reqId === reqId;
+        });
+      }
+    }
+  }, {
+    key: "removeAllListeners",
+    value: function removeAllListeners() {
+      this.listeners = new Map();
     }
   }]);
   return WebService;

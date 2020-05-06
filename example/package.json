@@ -5,8 +5,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "cross-env webpack-dev-server  --config webpack.dev.js --color -p --progress --display-optimization-bailout",
-    "link:eclass-web-service": "cd ../packages/eclass-web-service && npm link && cd ../../example && npm link @easiclass/eclass-web-service",
-    "link:web-service": "cd ../packages/web-service && npm link && cd ../../example && npm link @easiclass/web-service",
+    "link:eclass-web-service": "cd ../packages/eclass-web-service && npm link && cd ../../example && npm link @student/eclass-web-service",
+    "link:web-service": "cd ../packages/web-service && npm link && cd ../../example && npm link @student/web-service",
     "link": "npm run link:eclass-web-service && npm run link:web-service"
   },
   "dependencies": {

@@ -8,7 +8,7 @@
     "build": "gulp build",
     "watch": " gulp watch",
     "link": "cd example && npm run link",
-    "dev": "lerna bootstrap && cd example && npm run dev",
+    "dev": "lerna bootstrap && cd example && npm run link && npm run dev",
     "publish": "lerna publish from-package --force-publish --yes --registry http://nexus.gz.cvte.cn:8081/nexus/repository/npm-hosted/"
   },
   "dependencies": {
