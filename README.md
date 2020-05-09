@@ -51,7 +51,7 @@ iframeWebService.on('common.requestName', (msg, ctx) => {
 ```
 
 ## web-service
-通用消息sdk，不具有具体的通讯通道，需结合@easiclass/web-messager或自定义messager插件（见eclass-web-serice的实现）
+通用消息sdk，不具有具体的通讯通道，需结合@student/web-messager或自定义messager插件（见eclass-web-serice的实现）
 下面描述如何自定义webservice
 
 
