@@ -4,7 +4,7 @@
 
 1.  规范了消息协议
 2.  提供请求响应式的api
-3.  提供了基本的iframe和webview通讯方式，支持插件式拓展
+3.  提供了基本的iframe和webview通讯方式，支持通讯方式拓展
 
 
 ## Eclass-web-service
