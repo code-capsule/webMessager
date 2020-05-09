@@ -11,7 +11,7 @@
 易课堂消息sdk
 
 ```
-import EclassWebService from "@easiclass/eclass-web-service";
+import EclassWebService from "@student/eclass-web-service";
 
 // 不指定类型将自动判断环境
 const iframeWebService = new EclassWebService('iframe');
@@ -86,7 +86,7 @@ class Messager  {
 
 ## webservice引入messager
 ```
-import WebService from "@easiclass/web-service";
+import WebService from "@student/web-service";
 import customMessager from "./messager";
 
 const iframeWebService = new WebService({ messager });
