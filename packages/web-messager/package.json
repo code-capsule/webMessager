@@ -1,5 +1,5 @@
 {
-  "name": "@student/web-messager",
+  "name": "@sugarteam/web-messager",
   "version": "1.0.3",
   "main": "dist/index.js",
   "license": "MIT"
