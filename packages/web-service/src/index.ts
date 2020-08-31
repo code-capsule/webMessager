@@ -1,6 +1,6 @@
 import uuid from 'uuid';
 import { remove, merge } from 'lodash';
-import { IMessager, Message } from '@student/web-messager'; 
+import { IMessager, Message } from '@sugarteam/web-messager'; 
 import { MessageListener } from './types';
 
 interface ServiceOption {

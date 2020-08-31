@@ -1,5 +1,5 @@
-import WebService from '@student/web-service';
-import { iframeMessager, webviewMessager } from '@student/web-messager';
+import WebService from '@sugarteam/web-service';
+import { iframeMessager, webviewMessager } from '@sugarteam/web-messager';
 
 
 class EclassWebService {

@@ -2,9 +2,9 @@
     "compilerOptions": {
         "baseUrl": ".",
         "paths": {
-            "@student/eclass-web-service": ["packages/eclass-web-service/src/index.ts"],
-            "@student/web-messager": ["packages/web-messager/src/index.ts"],
-            "@student/web-service": ["packages/web-service/src/index.ts"],
+            "@sugarteam/eclass-web-service": ["packages/eclass-web-service/src/index.ts"],
+            "@sugarteam/web-messager": ["packages/web-messager/src/index.ts"],
+            "@sugarteam/web-service": ["packages/web-service/src/index.ts"],
         }
     }
 }
