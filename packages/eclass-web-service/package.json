@@ -6,5 +6,6 @@
   "dependencies": {
     "@sugarteam/web-messager": "^1.0.5",
     "@sugarteam/web-service": "^1.0.5"
-  }
+  },
+  "gitHead": "57057cbf07d6eec227d9279291e1c9b708450d1f"
 }

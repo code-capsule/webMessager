@@ -8,5 +8,6 @@
     "@sugarteam/web-messager": "^1.0.5",
     "@types/lodash": "^4.14.144",
     "uuid": "^3.3.3"
-  }
+  },
+  "gitHead": "57057cbf07d6eec227d9279291e1c9b708450d1f"
 }
