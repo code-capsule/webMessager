@@ -1,11 +1,11 @@
 {
   "name": "@sugarteam/web-service",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "main": "dist/index.js",
   "author": "alex",
   "license": "MIT",
   "dependencies": {
-    "@sugarteam/web-messager": "^1.0.5",
+    "@sugarteam/web-messager": "^1.0.6",
     "@types/lodash": "^4.14.144",
     "uuid": "^3.3.3"
   },

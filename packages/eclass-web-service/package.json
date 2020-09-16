@@ -1,11 +1,11 @@
 {
   "name": "@sugarteam/eclass-web-service",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "main": "dist/index.js",
   "license": "MIT",
   "dependencies": {
-    "@sugarteam/web-messager": "^1.0.5",
-    "@sugarteam/web-service": "^1.0.5"
+    "@sugarteam/web-messager": "^1.0.6",
+    "@sugarteam/web-service": "^1.0.6"
   },
   "gitHead": "975c09de6d38099cb4694229e26123e454aa71e4"
 }
