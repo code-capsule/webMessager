@@ -155,6 +155,12 @@ class WebService {
             this.retryQueue.push({type, headers, data});
             console.log('[webservice]client is not ready, request wait for sending', {type, headers, data});
         } else {
+            const onWebServiceExecOperation = global['onWebServiceExecOperation']
+            onWebServiceExecOperation && onWebServiceExecOperation(this, 'sendAction', {
+                type,
+                headers,
+                data
+            });
             console.log('[webService]send action', {type, headers, data});
         }
 
@@ -204,6 +210,12 @@ class WebService {
         
 
         this.listeners[type].push(messageListener);
+
+        const onWebServiceExecOperation = global['onWebServiceExecOperation']
+        onWebServiceExecOperation && onWebServiceExecOperation(this, 'addListener', {
+            type,
+            messageListener
+        });
     }
 
     /**

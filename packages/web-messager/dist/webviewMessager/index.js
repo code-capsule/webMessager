@@ -18,9 +18,7 @@ var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/de
  */
 var ECLASS_API = 'eclassExtends';
 
-var Messager =
-/*#__PURE__*/
-function () {
+var Messager = /*#__PURE__*/function () {
   function Messager() {
     (0, _classCallCheck2.default)(this, Messager);
     (0, _defineProperty2.default)(this, "send", void 0);

@@ -23,11 +23,9 @@ var _lodash = require("lodash");
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
-var WebService =
-/*#__PURE__*/
-function () {
+var WebService = /*#__PURE__*/function () {
   function WebService(serviceOption) {
     (0, _classCallCheck2.default)(this, WebService);
     (0, _defineProperty2.default)(this, "messager", void 0);
@@ -59,9 +57,7 @@ function () {
   }, {
     key: "fetchServices",
     value: function () {
-      var _fetchServices = (0, _asyncToGenerator2.default)(
-      /*#__PURE__*/
-      _regenerator.default.mark(function _callee() {
+      var _fetchServices = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee() {
         var response;
         return _regenerator.default.wrap(function _callee$(_context) {
           while (1) {
@@ -137,7 +133,7 @@ function () {
 
       var reqId = headers.reqId;
 
-      var ctx = _objectSpread({}, message, {
+      var ctx = _objectSpread(_objectSpread({}, message), {}, {
         end: function end(response) {
           (0, _lodash.merge)(response, {
             headers: {
@@ -240,6 +236,12 @@ function () {
           data: data
         });
       } else {
+        var onWebServiceExecOperation = global['onWebServiceExecOperation'];
+        onWebServiceExecOperation && onWebServiceExecOperation(this, 'sendAction', {
+          type: type,
+          headers: headers,
+          data: data
+        });
         console.log('[webService]send action', {
           type: type,
           headers: headers,
@@ -303,6 +305,11 @@ function () {
       }
 
       this.listeners[type].push(messageListener);
+      var onWebServiceExecOperation = global['onWebServiceExecOperation'];
+      onWebServiceExecOperation && onWebServiceExecOperation(this, 'addListener', {
+        type: type,
+        messageListener: messageListener
+      });
     }
     /**
      * 移除事件监听器

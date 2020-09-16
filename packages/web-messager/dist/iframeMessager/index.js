@@ -14,9 +14,7 @@ var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/creat
 /**
  * eclass webview通讯器
  */
-var Messager =
-/*#__PURE__*/
-function () {
+var Messager = /*#__PURE__*/function () {
   function Messager() {
     (0, _classCallCheck2.default)(this, Messager);
   }
