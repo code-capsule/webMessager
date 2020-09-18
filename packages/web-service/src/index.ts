@@ -136,35 +136,32 @@ class WebService {
      * @param {object} config 请求信息
      */
     send(message: Message):Message {
-        const { 
-            type,
-            headers = { reqId: uuid() }, 
-            data = {}
-        } = message; 
+        let finalMessage ={ 
+            type: '',
+            headers: { reqId: uuid(), mMode: 'push' }, 
+            data: {}
+        };
+
+        merge(finalMessage, message);
+
+        const { type } = finalMessage;
 
         if (!type) {
             console.error('type is not supplied');
             return;
         }
-        
-        if (!headers.reqId) {
-            headers.reqId = uuid();
-        }
-        const isSuccess: boolean = this.messager.sendAction({type, headers, data});
+
+        const isSuccess: boolean = this.messager.sendAction(finalMessage);
         if (!isSuccess) {
-            this.retryQueue.push({type, headers, data});
-            console.log('[webservice]client is not ready, request wait for sending', {type, headers, data});
+            this.retryQueue.push(finalMessage);
+            console.log('[webservice]client is not ready, request wait for sending', finalMessage);
         } else {
             const onWebServiceExecOperation = global['onWebServiceExecOperation']
-            onWebServiceExecOperation && onWebServiceExecOperation(this, 'sendAction', {
-                type,
-                headers,
-                data
-            });
-            console.log('[webService]send action', {type, headers, data});
+            onWebServiceExecOperation && onWebServiceExecOperation(this, 'sendAction', finalMessage);
+            console.log('[webService]send action', finalMessage);
         }
 
-        return {type, headers, data};
+        return finalMessage;
     }
 
     /**
@@ -174,6 +171,10 @@ class WebService {
      */
     request(message: Message):Promise<Message> {
         return new Promise((resolve, reject) => {
+            message.headers = {
+                ...message.headers,
+                mMode: 'request',
+            };
             const req = this.send(message);
             this.on(message.type, {
                 callback: (data:Message) => {
@@ -202,7 +203,7 @@ class WebService {
             messageListener = {
                 callback: arg,
                 reqId: '',
-                once: false
+                once: false,
             }
         } else {
             messageListener = arg

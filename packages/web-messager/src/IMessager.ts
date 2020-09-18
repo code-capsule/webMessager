@@ -2,7 +2,8 @@
 export interface Message {
     type:string,
     headers?: {
-        reqId: string
+        reqId: string,
+        mMode?: string, 
     },
     data?: {
         code?:number,
