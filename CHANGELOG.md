@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.8](https://gitlab.gz.cvte.cn/student/common-components/frontend-components/easiclass-common/webservice/compare/v1.0.7...v1.0.8) (2020-09-19)
+
+**Note:** Version bump only for package web-service
+
+
+
+
+
 ## [1.0.7](https://gitlab.gz.cvte.cn/student/common-components/frontend-components/easiclass-common/webservice/compare/v1.0.6...v1.0.7) (2020-09-18)
 
 **Note:** Version bump only for package web-service
