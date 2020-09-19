@@ -135,14 +135,23 @@ class WebService {
      * 发送消息
      * @param {object} config 请求信息
      */
-    send(message: Message):Message {
+    send(message: Message | string, body?:object):Message {
         let finalMessage ={ 
             type: '',
             headers: { reqId: uuid(), mMode: 'push' }, 
             data: {}
         };
 
-        merge(finalMessage, message);
+        if (typeof message === 'string') {
+            merge(finalMessage, {
+                type: message,
+                data: {
+                    body
+                }
+            });
+        } else {
+            merge(finalMessage, message);
+        }
 
         const { type } = finalMessage;
 
@@ -169,14 +178,27 @@ class WebService {
      * @param {Message} message 请求信息
      * @return {Promise}
      */
-    request(message: Message):Promise<Message> {
+    request(message: Message | string,  body?:object):Promise<Message> {
         return new Promise((resolve, reject) => {
-            message.headers = {
-                ...message.headers,
+            let finalMessage;
+            if (typeof message === 'string') {
+                finalMessage = {
+                    type: message,
+                    data: {
+                        body
+                    }
+                }
+               
+            } else {
+                finalMessage = message;
+            }
+
+            finalMessage.headers = {
+                ...finalMessage.headers,
                 mMode: 'request',
             };
-            const req = this.send(message);
-            this.on(message.type, {
+            const req = this.send(finalMessage);
+            this.on(finalMessage.type, {
                 callback: (data:Message) => {
                     resolve(data)
                 }, 

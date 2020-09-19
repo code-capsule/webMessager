@@ -200,60 +200,46 @@ var WebService = /*#__PURE__*/function () {
 
   }, {
     key: "send",
-    value: function send(message) {
-      var type = message.type,
-          _message$headers = message.headers,
-          headers = _message$headers === void 0 ? {
-        reqId: (0, _uuid.default)()
-      } : _message$headers,
-          _message$data = message.data,
-          data = _message$data === void 0 ? {} : _message$data;
+    value: function send(message, body) {
+      var finalMessage = {
+        type: '',
+        headers: {
+          reqId: (0, _uuid.default)(),
+          mMode: 'push'
+        },
+        data: {}
+      };
+
+      if (typeof message === 'string') {
+        (0, _lodash.merge)(finalMessage, {
+          type: message,
+          data: {
+            body: body
+          }
+        });
+      } else {
+        (0, _lodash.merge)(finalMessage, message);
+      }
+
+      var type = finalMessage.type;
 
       if (!type) {
         console.error('type is not supplied');
         return;
       }
 
-      if (!headers.reqId) {
-        headers.reqId = (0, _uuid.default)();
-      }
-
-      var isSuccess = this.messager.sendAction({
-        type: type,
-        headers: headers,
-        data: data
-      });
+      var isSuccess = this.messager.sendAction(finalMessage);
 
       if (!isSuccess) {
-        this.retryQueue.push({
-          type: type,
-          headers: headers,
-          data: data
-        });
-        console.log('[webservice]client is not ready, request wait for sending', {
-          type: type,
-          headers: headers,
-          data: data
-        });
+        this.retryQueue.push(finalMessage);
+        console.log('[webservice]client is not ready, request wait for sending', finalMessage);
       } else {
         var onWebServiceExecOperation = global['onWebServiceExecOperation'];
-        onWebServiceExecOperation && onWebServiceExecOperation(this, 'sendAction', {
-          type: type,
-          headers: headers,
-          data: data
-        });
-        console.log('[webService]send action', {
-          type: type,
-          headers: headers,
-          data: data
-        });
+        onWebServiceExecOperation && onWebServiceExecOperation(this, 'sendAction', finalMessage);
+        console.log('[webService]send action', finalMessage);
       }
 
-      return {
-        type: type,
-        headers: headers,
-        data: data
-      };
+      return finalMessage;
     }
     /**
      * 发起请求
@@ -263,13 +249,30 @@ var WebService = /*#__PURE__*/function () {
 
   }, {
     key: "request",
-    value: function request(message) {
+    value: function request(message, body) {
       var _this4 = this;
 
       return new Promise(function (resolve, reject) {
-        var req = _this4.send(message);
+        var finalMessage;
 
-        _this4.on(message.type, {
+        if (typeof message === 'string') {
+          finalMessage = {
+            type: message,
+            data: {
+              body: body
+            }
+          };
+        } else {
+          finalMessage = message;
+        }
+
+        finalMessage.headers = _objectSpread(_objectSpread({}, finalMessage.headers), {}, {
+          mMode: 'request'
+        });
+
+        var req = _this4.send(finalMessage);
+
+        _this4.on(finalMessage.type, {
           callback: function callback(data) {
             resolve(data);
           },

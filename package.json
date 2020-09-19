@@ -9,7 +9,7 @@
     "watch": " gulp watch",
     "link": "cd example && npm run link",
     "dev": "lerna bootstrap && cd example && npm run link && npm run dev",
-    "publish": "lerna publish from-package --force-publish --yes --registry=https://registry.npmjs.org/"
+    "publish": "lerna version --yes && lerna publish from-package --force-publish --yes --registry=https://registry.npmjs.org/"
   },
   "dependencies": {
     "@babel/core": "^7.6.4",
