@@ -262,10 +262,17 @@ class WebService {
                 return  listener.callback === callback || (listener.reqId && listener.reqId === reqId);
             })
         }
+        const onWebServiceExecOperation = global['onWebServiceExecOperation']
+        onWebServiceExecOperation && onWebServiceExecOperation(this, 'removeListener', {
+            type,
+            arg
+        });
     }
 
     removeAllListeners() {
         this.listeners = new Map();
+        const onWebServiceExecOperation = global['onWebServiceExecOperation']
+        onWebServiceExecOperation && onWebServiceExecOperation(this, 'removeAllListener');
     }
 }
 
