@@ -2,21 +2,17 @@
  * DEVELOPMENT WEBPACK CONFIGURATION
  */
 
-const path = require('path');
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path')
+const webpack = require('webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = require('./webpack.base.babel')({
   mode: 'development',
 
-  // Add hot reloading in development
   entry: [
     'webpack-hot-middleware/client?reload=true',
-    path.join(process.cwd(), 'app/index.js'), 
-    // path.join(process.cwd(), 'iframe/iframe.js'), 
+    path.join(process.cwd(), 'app/iframe/child.js'),
   ],
-
-  // Don't use hashes in dev mode for better performance
   output: {
     filename: '[name].js',
     chunkFilename: '[name].chunk.js',
@@ -30,11 +26,10 @@ module.exports = require('./webpack.base.babel')({
   },
 
   devServer: {
-    port: 8081,
+    port: 8082,
     host: '0.0.0.0',
   },
 
-  // Add development plugins
   plugins: [
     new webpack.HotModuleReplacementPlugin(), // Tell webpack we want hot reloading
     new HtmlWebpackPlugin({
@@ -42,12 +37,9 @@ module.exports = require('./webpack.base.babel')({
       template: 'app/index.html',
     }),
   ],
-
-  // Emit a source map for easier debugging
-  // See https://webpack.js.org/configuration/devtool/#devtool
   devtool: 'eval-source-map',
 
   performance: {
     hints: false,
   },
-});
+})

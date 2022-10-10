@@ -1,10 +1,12 @@
 {
-    "compilerOptions": {
-        "baseUrl": ".",
-        "paths": {
-            "@sugarteam/eclass-web-service": ["packages/eclass-web-service/src/index.ts"],
-            "@sugarteam/web-messager": ["packages/web-messager/src/index.ts"],
-            "@sugarteam/web-service": ["packages/web-service/src/index.ts"],
-        }
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@codeCapsule/iframe-web-service": [
+        "packages/iframe-web-service/src/index.ts"
+      ],
+      "@codeCapsule/web-messager": ["packages/web-messager/src/index.ts"],
+      "@codeCapsule/web-service": ["packages/web-service/src/index.ts"]
     }
+  }
 }

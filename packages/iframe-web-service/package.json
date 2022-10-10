@@ -1,13 +1,11 @@
 {
-  "name": "@codeCapsule/web-service",
+  "name": "@codeCapsule/iframe-web-service",
   "version": "0.0.1",
   "main": "dist/index.js",
-  "author": "alex",
   "license": "MIT",
   "dependencies": {
     "@codeCapsule/web-messager": "^0.0.1",
-    "@types/lodash": "^4.14.144",
-    "uuid": "^3.3.3"
+    "@codeCapsule/web-service": "^0.0.1"
   },
   "gitHead": "975c09de6d38099cb4694229e26123e454aa71e4"
 }

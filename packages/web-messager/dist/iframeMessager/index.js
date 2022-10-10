@@ -1,1 +1,31 @@
-"use strict";var _interopRequireDefault=require("@babel/runtime/helpers/interopRequireDefault");Object.defineProperty(exports,"__esModule",{value:!0}),exports.iframeMessager=void 0;var _classCallCheck2=_interopRequireDefault(require("@babel/runtime/helpers/classCallCheck")),_createClass2=_interopRequireDefault(require("@babel/runtime/helpers/createClass")),Messager=function(){function e(){(0,_classCallCheck2.default)(this,e)}return(0,_createClass2.default)(e,[{key:"getCheckServiceType",value:function(){return"common.requestFunctions"}},{key:"onReceiveMessage",value:function(e){window.addEventListener("message",(function(r){r.data.headers&&e(r.data)}))}},{key:"sendAction",value:function(e){var r=e.type,a=e.headers,s=e.data;return window.parent!==window&&window.parent.postMessage({type:r,headers:a,data:s},"*"),!0}}]),e}(),iframeMessager=new Messager;exports.iframeMessager=iframeMessager;
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _parent = require("./parent");
+
+Object.keys(_parent).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _parent[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _parent[key];
+    }
+  });
+});
+
+var _child = require("./child");
+
+Object.keys(_child).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _child[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _child[key];
+    }
+  });
+});
