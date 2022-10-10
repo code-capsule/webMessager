@@ -1,60 +1,58 @@
 /**
- * eclass webview通讯器
+ * webview通讯器
  */
 
-import IMessager from '../IMessager';
+import IMessager from '../IMessager'
 
-const ECLASS_API = 'eclassExtends';
+const WEBVIEW_API = 'webviewExtends'
 class Messager implements IMessager {
-    private send: Function;
-    public onready: Function;
-    constructor() { 
-        this.onCreate();  
+  private send: Function
+  public onready: Function
+  constructor() {
+    this.onCreate()
+  }
+
+  onCreate() {
+    if (!window[WEBVIEW_API]) {
+      window[WEBVIEW_API] = {}
     }
 
-    onCreate() {
-        if (!window[ECLASS_API]) {
-            window[ECLASS_API] = {};
-        } 
-
-        if (!window[ECLASS_API]['sendAction']) {
-            return;
-        }
-        Object.defineProperty(window[ECLASS_API], 'sendAction', {
-            get: () => {
-                return this.send;
-            },
-            set: (value) => {
-                this.send = value;
-                this.onready && this.onready();
-            }
-        })
+    if (!window[WEBVIEW_API]['sendAction']) {
+      return
     }
+    Object.defineProperty(window[WEBVIEW_API], 'sendAction', {
+      get: () => {
+        return this.send
+      },
+      set: (value) => {
+        this.send = value
+        this.onready && this.onready()
+      },
+    })
+  }
 
-    getCheckServiceType() {
-        return 'common.requestFunctions';
+  getCheckServiceType() {
+    return 'common.requestFunctions'
+  }
+
+  onReceiveMessage(messageHandler) {
+    if (!window[WEBVIEW_API].callback) {
+      window[WEBVIEW_API].callback = (jsonStr) => {
+        const message = JSON.parse(jsonStr)
+        messageHandler(message)
+      }
     }
+  }
 
-    onReceiveMessage(messageHandler) {
-        if (!window[ECLASS_API].callback) {
-            window[ECLASS_API].callback = (jsonStr) => {
-                const message = JSON.parse(jsonStr);
-                messageHandler(message);
-            };
-        }
+  sendAction(message) {
+    const jsonStr = JSON.stringify(message)
+    if (window[WEBVIEW_API].sendAction) {
+      window[WEBVIEW_API].sendAction(jsonStr)
+      return true
+    } else {
+      return false
     }
-
-    sendAction(message) {
-        const jsonStr = JSON.stringify(message);
-        if (window[ECLASS_API].sendAction) {
-            window[ECLASS_API].sendAction(jsonStr);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-
+  }
 }
 
-export const webviewMessager = new Messager();
+export const webviewMessager = new Messager()

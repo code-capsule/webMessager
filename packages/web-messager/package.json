@@ -1,6 +1,6 @@
 {
-  "name": "@sugarteam/web-messager",
-  "version": "1.0.7",
+  "name": "@codeCapsule/web-messager",
+  "version": "0.0.1",
   "main": "dist/index.js",
   "license": "MIT",
   "gitHead": "975c09de6d38099cb4694229e26123e454aa71e4"

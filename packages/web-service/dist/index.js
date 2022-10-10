@@ -1,1 +1,347 @@
-"use strict";var _interopRequireDefault=require("@babel/runtime/helpers/interopRequireDefault");Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var _classCallCheck2=_interopRequireDefault(require("@babel/runtime/helpers/classCallCheck")),_createClass2=_interopRequireDefault(require("@babel/runtime/helpers/createClass")),_defineProperty2=_interopRequireDefault(require("@babel/runtime/helpers/defineProperty")),_uuid=_interopRequireDefault(require("uuid")),_lodash=require("lodash"),_logger=_interopRequireDefault(require("./logger"));function ownKeys(e,r){var t=Object.keys(e);if(Object.getOwnPropertySymbols){var s=Object.getOwnPropertySymbols(e);r&&(s=s.filter((function(r){return Object.getOwnPropertyDescriptor(e,r).enumerable}))),t.push.apply(t,s)}return t}function _objectSpread(e){for(var r=1;r<arguments.length;r++){var t=null!=arguments[r]?arguments[r]:{};r%2?ownKeys(Object(t),!0).forEach((function(r){(0,_defineProperty2.default)(e,r,t[r])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(t)):ownKeys(Object(t)).forEach((function(r){Object.defineProperty(e,r,Object.getOwnPropertyDescriptor(t,r))}))}return e}var WebService=function(){function e(r){(0,_classCallCheck2.default)(this,e),(0,_defineProperty2.default)(this,"messager",void 0),(0,_defineProperty2.default)(this,"listeners",new Map),(0,_defineProperty2.default)(this,"retryQueue",[]),(0,_defineProperty2.default)(this,"namespace",void 0),(0,_defineProperty2.default)(this,"logger",void 0);var t=r.messager,s=r.log,a=r.namespace;this.namespace=a,this.logger=new _logger.default(s,this.namespace),this.initMessager(t)}return(0,_createClass2.default)(e,[{key:"initMessager",value:function(e){var r=this;this.messager=e,this.messager.onReceiveMessage(this.handleReceiveMessage.bind(this)),this.messager.onready=function(){r.startRetryRequest()}}},{key:"startRetryRequest",value:function(){var e=this,r=this.retryQueue.slice();this.retryQueue=[],r.forEach((function(r){e.send(r)}))}},{key:"handleReceiveMessage",value:function(e){var r=this,t=e.type,s=e.headers;this.logger.logMessage("receive message",e);var a=this.listeners[t];if(a){var i=s.reqId,n=_objectSpread(_objectSpread({},e),{},{end:function(e){(0,_lodash.merge)(e,{headers:{reqId:i},type:t}),r.send(e)}});this._handleOnceListeners(a,n),this._handleNormalListeners(a,n)}}},{key:"_handleOnceListeners",value:function(e,r){var t=r.headers,s=r.data,a=t.reqId;(0,_lodash.remove)(e,(function(e){var r=e.reqId&&e.reqId===a||!e.reqId;return e.once&&r})).forEach((function(e){e.callback&&e.callback(s,r)}))}},{key:"_handleNormalListeners",value:function(e,r){var t=r.headers,s=r.data,a=t.reqId;e.forEach((function(e){e.reqId?e.reqId===a&&e.callback&&e.callback(s,r):e.callback&&e.callback(s,r)}))}},{key:"send",value:function(e,r){var t={type:"",headers:{reqId:(0,_uuid.default)(),mMode:"push"},data:{}};if("string"==typeof e?(0,_lodash.merge)(t,{type:e,data:{body:r}}):(0,_lodash.merge)(t,e),t.type){if(this.messager.sendAction(t)){var s=globalThis.onWebServiceExecOperation;s&&s(this,"sendAction",t),this.logger.logMessage("send message",t)}else this.retryQueue.push(t),this.logger.logMessage("receiver is not ready, request will wait and resend",t);return t}console.error("[webService]message type for sending is not supplied")}},{key:"request",value:function(e,r){var t=this;return new Promise((function(s,a){var i;(i="string"==typeof e?{type:e,data:{body:r}}:e).headers=_objectSpread(_objectSpread({},i.headers),{},{mMode:"request"});var n=t.send(i);t.on(i.type,{callback:function(e){s(e)},reqId:n.headers.reqId,once:!0})}))}},{key:"on",value:function(e,r){var t,s=this;this.listeners[e]||(this.listeners[e]=[]),t="function"==typeof r?{callback:r,reqId:"",once:!1}:r,this.listeners[e].push(t);var a=globalThis.onWebServiceExecOperation;a&&a(this,"addListener",{type:e,messageListener:t});return function(){s.off(e,t)}}},{key:"off",value:function(e,r){if(r){var t;if("function"==typeof r)(0,_lodash.remove)(this.listeners[e],(function(e){return e.callback===r})),t={callback:r};else{var s=r.callback,a=r.reqId;(0,_lodash.remove)(this.listeners[e],(function(e){return e.callback===s||e.reqId&&e.reqId===a})),t=r}0===this.listeners[e].length&&delete this.listeners[e];var i=globalThis.onWebServiceExecOperation;i&&i(this,"removeListener",{type:e,messageListener:t})}else delete this.listeners[e]}},{key:"removeAllListeners",value:function(){this.listeners=new Map;var e=globalThis.onWebServiceExecOperation;e&&e(this,"removeAllListener")}}]),e}(),_default=WebService;exports.default=_default;
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
+
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+
+var _uuid = _interopRequireDefault(require("uuid"));
+
+var _lodash = require("lodash");
+
+var _logger = _interopRequireDefault(require("./logger"));
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+
+var WebService = /*#__PURE__*/function () {
+  function WebService(serviceOption) {
+    (0, _classCallCheck2.default)(this, WebService);
+    (0, _defineProperty2.default)(this, "messager", void 0);
+    (0, _defineProperty2.default)(this, "listeners", new Map());
+    (0, _defineProperty2.default)(this, "retryQueue", []);
+    (0, _defineProperty2.default)(this, "namespace", void 0);
+    (0, _defineProperty2.default)(this, "logger", void 0);
+    var messager = serviceOption.messager,
+        log = serviceOption.log,
+        namespace = serviceOption.namespace;
+    this.namespace = namespace;
+    this.logger = new _logger.default(log, this.namespace);
+    this.initMessager(messager);
+  }
+
+  (0, _createClass2.default)(WebService, [{
+    key: "initMessager",
+    value: function initMessager(messager) {
+      var _this = this;
+
+      this.messager = messager;
+      this.messager.onReceiveMessage(this.handleReceiveMessage.bind(this));
+
+      this.messager.onready = function () {
+        _this.startRetryRequest();
+      };
+    } // /**
+    //  * 发现可用服务
+    //  */
+    // async fetchServices(): Promise<Array<string>> {
+    //     const response  = await this.request({
+    //         type: this.messager.getCheckServiceType(),
+    //     });
+    //     this.services = response.data.body.functions;
+    //     return this.services;
+    // }
+    // /**
+    //  * 检测服务是否可用
+    //  * @param {string} type 服务类型
+    //  *
+    //  */
+    // checkServiceAvailable(type) {
+    //     return this.services.indexOf(type) !== -1;
+    // }
+
+    /**
+     * 开始执行请求重发队列
+     */
+
+  }, {
+    key: "startRetryRequest",
+    value: function startRetryRequest() {
+      var _this2 = this;
+
+      var retryQueue = this.retryQueue.slice();
+      this.retryQueue = [];
+      retryQueue.forEach(function (message) {
+        _this2.send(message);
+      });
+    }
+    /**
+     * 处理平台发送给webview的消息
+     */
+
+  }, {
+    key: "handleReceiveMessage",
+    value: function handleReceiveMessage(message) {
+      var _this3 = this;
+
+      var type = message.type,
+          headers = message.headers;
+      this.logger.logMessage('receive message', message);
+      var eventListeners = this.listeners[type];
+
+      if (!eventListeners) {
+        return;
+      }
+
+      var reqId = headers.reqId;
+
+      var ctx = _objectSpread(_objectSpread({}, message), {}, {
+        end: function end(response) {
+          (0, _lodash.merge)(response, {
+            headers: {
+              reqId: reqId
+            },
+            type: type
+          });
+
+          _this3.send(response);
+        }
+      });
+
+      this._handleOnceListeners(eventListeners, ctx);
+
+      this._handleNormalListeners(eventListeners, ctx);
+    }
+    /**
+     * 处理一次性事件监听器（执行和移除）
+     * @param {事件监听器数组} eventListeners
+     * @param {消息上下文} ctx
+     */
+
+  }, {
+    key: "_handleOnceListeners",
+    value: function _handleOnceListeners(eventListeners, ctx) {
+      var headers = ctx.headers,
+          data = ctx.data;
+      var reqId = headers.reqId;
+      var onceListeners = (0, _lodash.remove)(eventListeners, function (listener) {
+        var isReqMatch = listener.reqId && listener.reqId === reqId || !listener.reqId;
+        return listener.once && isReqMatch;
+      });
+      onceListeners.forEach(function (listener) {
+        listener.callback && listener.callback(data, ctx);
+      });
+    }
+    /**
+     * 处理普通事件监听器（执行）
+     * @param {事件监听器数组} eventListeners
+     * @param {消息上下文} ctx
+     */
+
+  }, {
+    key: "_handleNormalListeners",
+    value: function _handleNormalListeners(eventListeners, ctx) {
+      var headers = ctx.headers,
+          data = ctx.data;
+      var reqId = headers.reqId;
+      eventListeners.forEach(function (listener) {
+        if (!listener.reqId) {
+          listener.callback && listener.callback(data, ctx);
+          return;
+        }
+
+        if (listener.reqId === reqId) {
+          listener.callback && listener.callback(data, ctx);
+        }
+      });
+    }
+    /**
+     * 发送消息
+     * @param {object} config 请求信息
+     */
+
+  }, {
+    key: "send",
+    value: function send(message, body) {
+      var finalMessage = {
+        type: '',
+        headers: {
+          reqId: (0, _uuid.default)(),
+          mMode: 'push'
+        },
+        data: {}
+      };
+
+      if (typeof message === 'string') {
+        (0, _lodash.merge)(finalMessage, {
+          type: message,
+          data: {
+            body: body
+          }
+        });
+      } else {
+        (0, _lodash.merge)(finalMessage, message);
+      }
+
+      var type = finalMessage.type;
+
+      if (!type) {
+        console.error('[webService]message type for sending is not supplied');
+        return;
+      }
+
+      var isSuccess = this.messager.sendAction(finalMessage);
+
+      if (!isSuccess) {
+        this.retryQueue.push(finalMessage);
+        this.logger.logMessage("receiver is not ready, request will wait and resend", finalMessage);
+      } else {
+        var onWebServiceExecOperation = globalThis['onWebServiceExecOperation'];
+        onWebServiceExecOperation && onWebServiceExecOperation(this, 'sendAction', finalMessage);
+        this.logger.logMessage('send message', finalMessage);
+      }
+
+      return finalMessage;
+    }
+    /**
+     * 发起请求
+     * @param {Message} message 请求信息
+     * @return {Promise}
+     */
+
+  }, {
+    key: "request",
+    value: function request(message, body) {
+      var _this4 = this;
+
+      return new Promise(function (resolve, reject) {
+        var finalMessage;
+
+        if (typeof message === 'string') {
+          finalMessage = {
+            type: message,
+            data: {
+              body: body
+            }
+          };
+        } else {
+          finalMessage = message;
+        }
+
+        finalMessage.headers = _objectSpread(_objectSpread({}, finalMessage.headers), {}, {
+          mMode: 'request'
+        });
+
+        var req = _this4.send(finalMessage);
+
+        _this4.on(finalMessage.type, {
+          callback: function callback(data) {
+            resolve(data);
+          },
+          reqId: req.headers.reqId,
+          once: true
+        });
+      });
+    }
+    /**
+     * 监听事件
+     * @param {string} type 监听事件类型
+     * @param {function} callback 监听器回调函数
+     * @param {MessageListener} 完整监听器
+     */
+
+  }, {
+    key: "on",
+    value: function on(type, arg) {
+      var _this5 = this;
+
+      if (!this.listeners[type]) {
+        this.listeners[type] = [];
+      }
+
+      var messageListener;
+
+      if (typeof arg === 'function') {
+        messageListener = {
+          callback: arg,
+          reqId: '',
+          once: false
+        };
+      } else {
+        messageListener = arg;
+      }
+
+      this.listeners[type].push(messageListener);
+      var onWebServiceExecOperation = globalThis['onWebServiceExecOperation'];
+      onWebServiceExecOperation && onWebServiceExecOperation(this, 'addListener', {
+        type: type,
+        messageListener: messageListener
+      });
+
+      var unsubscribe = function unsubscribe() {
+        _this5.off(type, messageListener);
+      };
+
+      return unsubscribe;
+    }
+    /**
+     * 移除事件监听器
+     * @param {监听事件类型} type
+     * @param {监听器属性} messageListener 不传则移除对应事件全部监听器，可指定 callback 或 id 进行移除
+     */
+
+  }, {
+    key: "off",
+    value: function off(type, arg) {
+      if (!arg) {
+        delete this.listeners[type];
+        return;
+      }
+
+      var messageListener;
+
+      if (typeof arg === 'function') {
+        (0, _lodash.remove)(this.listeners[type], function (listener) {
+          return listener.callback === arg;
+        });
+        messageListener = {
+          callback: arg
+        };
+      } else {
+        var callback = arg.callback,
+            reqId = arg.reqId;
+        (0, _lodash.remove)(this.listeners[type], function (listener) {
+          return listener.callback === callback || listener.reqId && listener.reqId === reqId;
+        });
+        messageListener = arg;
+      }
+
+      if (this.listeners[type].length === 0) delete this.listeners[type];
+      var onWebServiceExecOperation = globalThis['onWebServiceExecOperation'];
+      onWebServiceExecOperation && onWebServiceExecOperation(this, 'removeListener', {
+        type: type,
+        messageListener: messageListener
+      });
+    }
+  }, {
+    key: "removeAllListeners",
+    value: function removeAllListeners() {
+      this.listeners = new Map();
+      var onWebServiceExecOperation = globalThis['onWebServiceExecOperation'];
+      onWebServiceExecOperation && onWebServiceExecOperation(this, 'removeAllListener');
+    }
+  }]);
+  return WebService;
+}();
+
+var _default = WebService;
+exports.default = _default;
