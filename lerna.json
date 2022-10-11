@@ -6,7 +6,7 @@
   "version": "0.1.0",
   "command": {
     "publish": {
-      "conventionalCommits": true,
+      "conventionalCommits": false,
       "ignoreChanges": [
         "*.md"
       ],
