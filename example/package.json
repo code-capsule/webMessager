@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev:iframe-web-service": "npm run link && npm run dev:child-iframe-web-service && npm run dev:parent-iframe-web-service",
+    "dev:iframe-web-service": "concurrently \"npm run link\" \"npm run dev:child-iframe-web-service\" \"npm run dev:parent-iframe-web-service\"",
     "dev:parent-iframe-web-service": "cross-env webpack-dev-server  --config ./webpack/webpack.parent.iframe.dev.js --color -p --progress --display-optimization-bailout",
     "dev:child-iframe-web-service": "cross-env webpack-dev-server  --config ./webpack/webpack.child.iframe.dev.js --color -p --progress --display-optimization-bailout",
     "link:iframe-web-service": "cd ../packages/iframe-web-service && npm link && cd ../../example && npm link @codecapsule/iframe-web-service",
@@ -23,5 +23,8 @@
     "webpack-cli": "^3.3.9",
     "webpack-dev-server": "^3.9.0",
     "webpack-hot-middleware": "^2.25.0"
+  },
+  "devDependencies": {
+    "concurrently": "^7.4.0"
   }
 }

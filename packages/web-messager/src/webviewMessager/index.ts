@@ -5,7 +5,7 @@
 import IMessager from '../IMessager'
 
 const WEBVIEW_API = 'webviewExtends'
-class Messager implements IMessager {
+class WebviewMessager implements IMessager {
   private send: Function
   public onready: Function
   constructor() {
@@ -13,14 +13,14 @@ class Messager implements IMessager {
   }
 
   onCreate() {
-    if (!globalThis[WEBVIEW_API]) {
-      globalThis[WEBVIEW_API] = {}
+    if (!window[WEBVIEW_API]) {
+      window[WEBVIEW_API] = {}
     }
 
-    if (!globalThis[WEBVIEW_API]['sendAction']) {
+    if (!window[WEBVIEW_API]['sendAction']) {
       return
     }
-    Object.defineProperty(globalThis[WEBVIEW_API], 'sendAction', {
+    Object.defineProperty(window[WEBVIEW_API], 'sendAction', {
       get: () => {
         return this.send
       },
@@ -36,8 +36,8 @@ class Messager implements IMessager {
   }
 
   onReceiveMessage(messageHandler) {
-    if (!globalThis[WEBVIEW_API].callback) {
-      globalThis[WEBVIEW_API].callback = (jsonStr) => {
+    if (!window[WEBVIEW_API].callback) {
+      window[WEBVIEW_API].callback = (jsonStr) => {
         const message = JSON.parse(jsonStr)
         messageHandler(message)
       }
@@ -46,8 +46,8 @@ class Messager implements IMessager {
 
   sendAction(message) {
     const jsonStr = JSON.stringify(message)
-    if (globalThis[WEBVIEW_API].sendAction) {
-      globalThis[WEBVIEW_API].sendAction(jsonStr)
+    if (window[WEBVIEW_API].sendAction) {
+      window[WEBVIEW_API].sendAction(jsonStr)
       return true
     } else {
       return false
@@ -55,4 +55,4 @@ class Messager implements IMessager {
   }
 }
 
-export const webviewMessager = new Messager()
+export { WebviewMessager }
