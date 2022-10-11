@@ -13,7 +13,7 @@
 引用：
 
 ```javascript
-import IFrameWebService from '@codeCapsule/iframe-web-service'
+import IFrameWebService from '@codecapsule/iframe-web-service'
 ```
 
 `IFrameWebService` 的 `props`:
@@ -34,7 +34,7 @@ interface IFrameWebServiceProps {
 ### 子窗口使用（`iframe`的那个窗口）：
 
 ```javascript
-import IFrameWebService from '@codeCapsule/iframe-web-service'
+import IFrameWebService from '@codecapsule/iframe-web-service'
 
 // 需要指定 messagerType 为 'child'
 const iframeWebService = new IframeWebService({ messagerType: 'child' })
@@ -97,7 +97,7 @@ async function sleep(delay = 3000) {
 ### 父窗口使用（承载`iframe`的那个窗口）
 
 ```javascript
-import IFrameWebService from '@codeCapsule/iframe-web-service'
+import IFrameWebService from '@codecapsule/iframe-web-service'
 
 // 需要指定 messagerType 为 'parent'
 // 同时需要传递子窗口的 iframe DOM 元素进来

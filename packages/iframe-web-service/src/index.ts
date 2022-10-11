@@ -1,8 +1,8 @@
-import WebService from '@codeCapsule/web-service'
+import WebService from '@codecapsule/web-service'
 import {
   parentIframeMessager,
   childIframeMessager,
-} from '@codeCapsule/web-messager'
+} from '@codecapsule/web-messager'
 
 export interface IFrameWebServiceProps {
   /**

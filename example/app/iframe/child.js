@@ -1,5 +1,5 @@
 import IframeWebService from '../../../packages/iframe-web-service'
-// import IframeWebService from '@codeCapsule/iframe-web-service'
+// import IframeWebService from '@codecapsule/iframe-web-service'
 import { createBtn, sleep } from '../utils'
 
 let iframeWebService

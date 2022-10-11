@@ -7,8 +7,8 @@
     "dev:iframe-web-service": "npm run link && npm run dev:child-iframe-web-service && npm run dev:parent-iframe-web-service",
     "dev:parent-iframe-web-service": "cross-env webpack-dev-server  --config ./webpack/webpack.parent.iframe.dev.js --color -p --progress --display-optimization-bailout",
     "dev:child-iframe-web-service": "cross-env webpack-dev-server  --config ./webpack/webpack.child.iframe.dev.js --color -p --progress --display-optimization-bailout",
-    "link:iframe-web-service": "cd ../packages/iframe-web-service && npm link && cd ../../example && npm link @codeCapsule/iframe-web-service",
-    "link:web-service": "cd ../packages/web-service && npm link && cd ../../example && npm link @codeCapsule/web-service",
+    "link:iframe-web-service": "cd ../packages/iframe-web-service && npm link && cd ../../example && npm link @codecapsule/iframe-web-service",
+    "link:web-service": "cd ../packages/web-service && npm link && cd ../../example && npm link @codecapsule/web-service",
     "link": "npm run link:iframe-web-service && npm run link:web-service"
   },
   "dependencies": {

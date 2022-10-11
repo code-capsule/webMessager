@@ -1,11 +1,11 @@
 {
-  "name": "@codeCapsule/web-service",
+  "name": "@codecapsule/web-service",
   "version": "0.0.1",
   "main": "dist/index.js",
   "author": "alex",
   "license": "MIT",
   "dependencies": {
-    "@codeCapsule/web-messager": "^0.0.1",
+    "@codecapsule/web-messager": "^0.0.1",
     "@types/lodash": "^4.14.144",
     "uuid": "^3.3.3"
   },

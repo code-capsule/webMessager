@@ -2,11 +2,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@codeCapsule/iframe-web-service": [
+      "@codecapsule/iframe-web-service": [
         "packages/iframe-web-service/src/index.ts"
       ],
-      "@codeCapsule/web-messager": ["packages/web-messager/src/index.ts"],
-      "@codeCapsule/web-service": ["packages/web-service/src/index.ts"]
+      "@codecapsule/web-messager": ["packages/web-messager/src/index.ts"],
+      "@codecapsule/web-service": ["packages/web-service/src/index.ts"]
     }
   }
 }
