@@ -1,6 +1,6 @@
 {
   "name": "@codecapsule/web-messager",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "main": "dist/index.js",
   "license": "MIT",
   "gitHead": "3e03b177b59ad934c996c6510c0f35f6e6f906ff"
