@@ -1,7 +1,7 @@
 import WebService from '@codecapsule/web-service'
 import {
-  parentIframeMessager,
-  childIframeMessager,
+  ParentIframeMessager,
+  ChildIframeMessager,
 } from '@codecapsule/web-messager'
 
 export interface IFrameWebServiceProps {
@@ -20,9 +20,10 @@ class IFrameWebService {
     const { messagerType, iframe } = props
     switch (messagerType) {
       case 'parent':
-        parentIframeMessager.setIframe(iframe)
+        const parentIframeMessager = new ParentIframeMessager({ iframe })
         return new WebService({ messager: parentIframeMessager })
       case 'child':
+        const childIframeMessager = new ChildIframeMessager()
         return new WebService({ messager: childIframeMessager })
     }
   }

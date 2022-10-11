@@ -1,5 +1,5 @@
-import IframeWebService from '../../../packages/iframe-web-service'
-// import IframeWebService from '@codecapsule/iframe-web-service'
+// import IframeWebService from '../../../packages/iframe-web-service'
+import IframeWebService from '@codecapsule/iframe-web-service'
 import { createBtn, sleep } from '../utils'
 
 let iframeWebService
@@ -47,9 +47,6 @@ function initBtn() {
   createBtn('send message to child', () => {
     iframeWebService.send({
       type: 'parentSendToChild',
-      headers: {
-        reqId: 'parentSendToChild',
-      },
       data: {
         body: {
           text: 'I am parent send',
@@ -61,9 +58,6 @@ function initBtn() {
   createBtn('request message to child', async () => {
     const result = await iframeWebService.request({
       type: 'requestToChild',
-      headers: {
-        reqId: 'requestToChild',
-      },
       data: {
         body: {
           text: 'I am parent request',

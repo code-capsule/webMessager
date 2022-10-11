@@ -4,6 +4,9 @@
   "main": "index.js",
   "author": "alex",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "gulp build",
     "watch": " gulp watch",
@@ -19,7 +22,7 @@
     "@babel/preset-typescript": "^7.6.0",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
-    "lerna": "^3.20.2"
+    "lerna": "^5.6.2"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.8.3"

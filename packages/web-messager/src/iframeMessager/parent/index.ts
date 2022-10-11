@@ -7,12 +7,10 @@ interface IProps {
   iframe: HTMLIFrameElement
 }
 
-class ParentIframeMessager implements IMessager {
+class ParentIframeMessagerConstructor implements IMessager {
   private iframe: HTMLIFrameElement
-  constructor() {}
-
-  setIframe(iframe) {
-    this.iframe = iframe
+  constructor(props: IProps) {
+    this.iframe = props.iframe
   }
 
   getCheckServiceType() {
@@ -32,4 +30,4 @@ class ParentIframeMessager implements IMessager {
   }
 }
 
-export const parentIframeMessager = new ParentIframeMessager()
+export const ParentIframeMessager = ParentIframeMessagerConstructor
