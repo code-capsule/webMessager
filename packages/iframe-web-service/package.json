@@ -1,11 +1,11 @@
 {
-  "name": "@codeCapsule/iframe-web-service",
+  "name": "@codecapsule/iframe-web-service",
   "version": "0.0.1",
   "main": "dist/index.js",
   "license": "MIT",
   "dependencies": {
-    "@codeCapsule/web-messager": "^0.0.1",
-    "@codeCapsule/web-service": "^0.0.1"
+    "@codecapsule/web-messager": "^0.0.1",
+    "@codecapsule/web-service": "^0.0.1"
   },
   "gitHead": "975c09de6d38099cb4694229e26123e454aa71e4"
 }

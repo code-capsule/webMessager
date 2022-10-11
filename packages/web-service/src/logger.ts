@@ -1,4 +1,4 @@
-import { Message } from '@codeCapsule/web-messager'
+import { Message } from '@codecapsule/web-messager'
 
 export type LogOption =
   | boolean
