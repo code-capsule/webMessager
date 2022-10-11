@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.1.0 (2022-10-11)
+
+
+### Features
+
+* 更新最新代码 ([c541287](https://github.com/code-capsule/webMessager/commit/c54128796b387eed5b577525a0b6adf2e41b8608))
+
+
+
+
+
+
 ## [1.0.7](https://gitlab.gz.cvte.cn/student/common-components/frontend-components/easiclass-common/webservice/compare/v1.0.6...v1.0.7) (2020-09-18)
 
 **Note:** Version bump only for package @sugarteam/web-messager
