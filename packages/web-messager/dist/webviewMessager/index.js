@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.webviewMessager = void 0;
+exports.WebviewMessager = void 0;
 
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
 
@@ -18,15 +18,15 @@ var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/de
  */
 var WEBVIEW_API = 'webviewExtends';
 
-var Messager = /*#__PURE__*/function () {
-  function Messager() {
-    (0, _classCallCheck2.default)(this, Messager);
+var WebviewMessager = /*#__PURE__*/function () {
+  function WebviewMessager() {
+    (0, _classCallCheck2.default)(this, WebviewMessager);
     (0, _defineProperty2.default)(this, "send", void 0);
     (0, _defineProperty2.default)(this, "onready", void 0);
     this.onCreate();
   }
 
-  (0, _createClass2.default)(Messager, [{
+  (0, _createClass2.default)(WebviewMessager, [{
     key: "onCreate",
     value: function onCreate() {
       var _this = this;
@@ -77,8 +77,7 @@ var Messager = /*#__PURE__*/function () {
       }
     }
   }]);
-  return Messager;
+  return WebviewMessager;
 }();
 
-var webviewMessager = new Messager();
-exports.webviewMessager = webviewMessager;
+exports.WebviewMessager = WebviewMessager;

@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.parentIframeMessager = void 0;
+exports.ParentIframeMessager = void 0;
 
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
 
@@ -16,18 +16,14 @@ var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/de
 /**
  * iframe 的父级通讯器
  */
-var ParentIframeMessager = /*#__PURE__*/function () {
-  function ParentIframeMessager() {
-    (0, _classCallCheck2.default)(this, ParentIframeMessager);
+var ParentIframeMessagerConstructor = /*#__PURE__*/function () {
+  function ParentIframeMessagerConstructor(props) {
+    (0, _classCallCheck2.default)(this, ParentIframeMessagerConstructor);
     (0, _defineProperty2.default)(this, "iframe", void 0);
+    this.iframe = props.iframe;
   }
 
-  (0, _createClass2.default)(ParentIframeMessager, [{
-    key: "setIframe",
-    value: function setIframe(iframe) {
-      this.iframe = iframe;
-    }
-  }, {
+  (0, _createClass2.default)(ParentIframeMessagerConstructor, [{
     key: "getCheckServiceType",
     value: function getCheckServiceType() {
       return 'common.requestFunctions';
@@ -53,8 +49,8 @@ var ParentIframeMessager = /*#__PURE__*/function () {
       return true;
     }
   }]);
-  return ParentIframeMessager;
+  return ParentIframeMessagerConstructor;
 }();
 
-var parentIframeMessager = new ParentIframeMessager();
-exports.parentIframeMessager = parentIframeMessager;
+var ParentIframeMessager = ParentIframeMessagerConstructor;
+exports.ParentIframeMessager = ParentIframeMessager;

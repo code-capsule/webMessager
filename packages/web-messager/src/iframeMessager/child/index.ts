@@ -3,7 +3,7 @@
  */
 
 import IMessager from '../../IMessager'
-class ChildIframeMessager implements IMessager {
+class ChildIframeMessagerConstructor implements IMessager {
   constructor() {}
 
   getCheckServiceType() {
@@ -23,4 +23,4 @@ class ChildIframeMessager implements IMessager {
   }
 }
 
-export const childIframeMessager = new ChildIframeMessager()
+export const ChildIframeMessager = ChildIframeMessagerConstructor

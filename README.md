@@ -42,9 +42,6 @@ const iframeWebService = new IframeWebService({ messagerType: 'child' })
 // 推送消息
 iframeWebService.send({
   type: 'childSendToParent',
-  headers: {
-    reqId: 'xxx', // uuid()
-  },
   data: {
     body: {
       text: 'I am child send',
@@ -55,9 +52,6 @@ iframeWebService.send({
 // 请求式
 const result = await iframeWebService.request({
   type: 'requestToParent',
-  headers: {
-    reqId: 'xxx', // uuid()
-  },
   data: {
     body: {
       text: 'I am child request',
@@ -109,9 +103,6 @@ iframeWebService = new IframeWebService({
 // 推送消息
 iframeWebService.send({
   type: 'parentSendToChild',
-  headers: {
-    reqId: 'xxx', // uuid()
-  },
   data: {
     body: {
       text: 'I am parent send',
@@ -122,9 +113,6 @@ iframeWebService.send({
 // 请求消息
 const result = await iframeWebService.request({
   type: 'requestToChild',
-  headers: {
-    reqId: 'xxx', // uuid()
-  },
   data: {
     body: {
       text: 'I am parent request',
@@ -163,7 +151,7 @@ async function sleep(delay = 3000) {
 
 ## web-service
 
-通用消息 sdk，不具有具体的通讯通道，需结合@student/web-messager 或自定义 messager 插件（见 eclass-web-serice 的实现）
+通用消息 sdk，不具有具体的通讯通道，需结合@codecapsule/web-messager 或自定义 messager 插件
 下面描述如何自定义 webservice
 
 ### 自定义 messager.js
@@ -196,7 +184,7 @@ class Messager {
 ## webservice 引入 messager
 
 ```javascript
-import WebService from '@student/web-service'
+import WebService from '@codecapsule/web-service'
 import customMessager from './messager'
 
 const iframeWebService = new WebService({ messager })
