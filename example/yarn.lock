@@ -52,11 +52,11 @@
     "lodash" "^4.17.13"
     "to-fast-properties" "^2.0.0"
 
-"@codeCapsule/web-service@file:../packages/web-service":
+"@codecapsule/web-service@file:../packages/web-service":
   "resolved" "file:../packages/web-service"
   "version" "0.0.1"
   dependencies:
-    "@codeCapsule/web-messager" "^0.0.1"
+    "@codecapsule/web-messager" "^0.0.1"
     "@types/lodash" "^4.14.144"
     "uuid" "^3.3.3"
 

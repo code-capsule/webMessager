@@ -1,6 +1,6 @@
 import uuid from 'uuid'
 import { remove, merge } from 'lodash'
-import { IMessager, Message } from '@codeCapsule/web-messager'
+import { IMessager, Message } from '@codecapsule/web-messager'
 import { MessageListener } from './types'
 import Logger, { LogOption } from './logger'
 
