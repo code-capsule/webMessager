@@ -40,22 +40,29 @@ import IFrameWebService from '@codecapsule/iframe-web-service'
 const iframeWebService = new IframeWebService({ messagerType: 'child' })
 
 // 推送消息
+
+// 方式一（推荐）
+iframeWebService.send('childSendToParent', {
+  text: 'I am child send',
+})
+// 方式二
 iframeWebService.send({
-  type: 'childSendToParent',
+  channel: 'childSendToParent',
   data: {
-    body: {
-      text: 'I am child send',
-    },
+    text: 'I am child send',
   },
 })
 
 // 请求式
+
+// 方式一（推荐）
+const result = await iframeWebService.request('requestToChild', {
+  text: 'I am parent request',
+})
 const result = await iframeWebService.request({
-  type: 'requestToParent',
+  channel: 'requestToParent',
   data: {
-    body: {
-      text: 'I am child request',
-    },
+    text: 'I am parent request',
   },
 })
 
@@ -101,8 +108,15 @@ iframeWebService = new IframeWebService({
 })
 
 // 推送消息
+
+// 方式一（推荐）
+iframeWebService.send('parentSendToChild', {
+  text: 'I am parent send',
+})
+
+// 方式二
 iframeWebService.send({
-  type: 'parentSendToChild',
+  channel: 'parentSendToChild',
   data: {
     body: {
       text: 'I am parent send',
@@ -111,8 +125,15 @@ iframeWebService.send({
 })
 
 // 请求消息
+
+// 方式一（推荐）
+const result = await iframeWebService.request('requestToChild', {
+  text: 'I am parent request',
+})
+
+// 方式二
 const result = await iframeWebService.request({
-  type: 'requestToChild',
+  channel: 'requestToChild',
   data: {
     body: {
       text: 'I am parent request',
@@ -174,9 +195,9 @@ class Messager {
   }
 
   // 实现webservice如何去发送消息
-  sendAction({ type, headers, data }) {
+  sendAction({ channel, headers, data }) {
     this.iframe &&
-      this.iframe.contentWindow.postMessage({ type, headers, data }, '*')
+      this.iframe.contentWindow.postMessage({ channel, headers, data }, '*')
   }
 }
 ```
@@ -191,7 +212,7 @@ const iframeWebService = new WebService({ messager })
 
 // 推送消息
 iframeWebService.send({
-  type: 'common.sayHello',
+  channel: 'common.sayHello',
   data: {
     body: {
       name: 'mike',
@@ -201,7 +222,7 @@ iframeWebService.send({
 
 // 请求式
 const response = await iframeWebService.request({
-  type: 'common.sayHello',
+  channel: 'common.sayHello',
   data: {
     body: {
       name: 'mike',

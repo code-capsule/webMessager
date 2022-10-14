@@ -32,23 +32,33 @@ function initIframeWebService() {
 
 function initBtn() {
   createBtn('send message to parent', () => {
-    iframeWebService.send({
-      channel: 'childSendToParent',
-      data: {
-        body: {
-          text: 'I am child send',
-        },
+    // iframeWebService.send({
+    //   channel: 'childSendToParent',
+    //   data: {
+    //     body: {
+    //       text: 'I am child send',
+    //     },
+    //   },
+    // })
+    iframeWebService.send('childSendToParent', {
+      body: {
+        text: 'I am child send',
       },
     })
   })
 
   createBtn('request message to parent', async () => {
-    const result = await iframeWebService.request({
-      channel: 'requestToParent',
-      data: {
-        body: {
-          text: 'I am child request',
-        },
+    // const result = await iframeWebService.request({
+    //   channel: 'requestToParent',
+    //   data: {
+    //     body: {
+    //       text: 'I am child request',
+    //     },
+    //   },
+    // })
+    const result = await iframeWebService.request('requestToParent', {
+      body: {
+        text: 'I am child request',
       },
     })
     console.log('result', result)
