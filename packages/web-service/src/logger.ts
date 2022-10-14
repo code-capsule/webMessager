@@ -23,7 +23,7 @@ export default class Logger {
       console.info(prefixText, message)
     } else {
       const { ignore } = this.option
-      if (ignore.indexOf(message.type) === -1) {
+      if (ignore.indexOf(message.channel) === -1) {
         console.info(prefixText, message)
       }
     }

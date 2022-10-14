@@ -55,18 +55,18 @@ var WebService = /*#__PURE__*/function () {
     //  */
     // async fetchServices(): Promise<Array<string>> {
     //     const response  = await this.request({
-    //         type: this.messager.getCheckServiceType(),
+    //         channel: this.messager.getCheckServiceType(),
     //     });
     //     this.services = response.data.body.functions;
     //     return this.services;
     // }
     // /**
     //  * 检测服务是否可用
-    //  * @param {string} type 服务类型
+    //  * @param {string} channel 服务类型
     //  *
     //  */
-    // checkServiceAvailable(type) {
-    //     return this.services.indexOf(type) !== -1;
+    // checkServiceAvailable(channel) {
+    //     return this.services.indexOf(channel) !== -1;
     // }
 
     /**
@@ -93,10 +93,10 @@ var WebService = /*#__PURE__*/function () {
     value: function handleReceiveMessage(message) {
       var _this3 = this;
 
-      var type = message.type,
+      var channel = message.channel,
           headers = message.headers;
       this.logger.logMessage('receive message', message);
-      var eventListeners = this.listeners[type];
+      var eventListeners = this.listeners[channel];
 
       if (!eventListeners) {
         return;
@@ -110,7 +110,7 @@ var WebService = /*#__PURE__*/function () {
             headers: {
               reqId: reqId
             },
-            type: type
+            channel: channel
           });
 
           _this3.send(response);
@@ -173,7 +173,7 @@ var WebService = /*#__PURE__*/function () {
     key: "send",
     value: function send(message, body) {
       var finalMessage = {
-        type: '',
+        channel: '',
         headers: {
           reqId: (0, _uuid.default)(),
           mMode: 'push'
@@ -183,7 +183,7 @@ var WebService = /*#__PURE__*/function () {
 
       if (typeof message === 'string') {
         (0, _lodash.merge)(finalMessage, {
-          type: message,
+          channel: message,
           data: {
             body: body
           }
@@ -192,10 +192,10 @@ var WebService = /*#__PURE__*/function () {
         (0, _lodash.merge)(finalMessage, message);
       }
 
-      var type = finalMessage.type;
+      var channel = finalMessage.channel;
 
-      if (!type) {
-        console.error('[webService]message type for sending is not supplied');
+      if (!channel) {
+        console.error('[webService]message channel for sending is not supplied');
         return;
       }
 
@@ -228,7 +228,7 @@ var WebService = /*#__PURE__*/function () {
 
         if (typeof message === 'string') {
           finalMessage = {
-            type: message,
+            channel: message,
             data: {
               body: body
             }
@@ -243,7 +243,7 @@ var WebService = /*#__PURE__*/function () {
 
         var req = _this4.send(finalMessage);
 
-        _this4.on(finalMessage.type, {
+        _this4.on(finalMessage.channel, {
           callback: function callback(data) {
             resolve(data);
           },
@@ -254,18 +254,18 @@ var WebService = /*#__PURE__*/function () {
     }
     /**
      * 监听事件
-     * @param {string} type 监听事件类型
+     * @param {string} channel 监听的事件名称
      * @param {function} callback 监听器回调函数
      * @param {MessageListener} 完整监听器
      */
 
   }, {
     key: "on",
-    value: function on(type, arg) {
+    value: function on(channel, arg) {
       var _this5 = this;
 
-      if (!this.listeners[type]) {
-        this.listeners[type] = [];
+      if (!this.listeners[channel]) {
+        this.listeners[channel] = [];
       }
 
       var messageListener;
@@ -280,37 +280,37 @@ var WebService = /*#__PURE__*/function () {
         messageListener = arg;
       }
 
-      this.listeners[type].push(messageListener);
+      this.listeners[channel].push(messageListener);
       var onWebServiceExecOperation = globalThis['onWebServiceExecOperation'];
       onWebServiceExecOperation && onWebServiceExecOperation(this, 'addListener', {
-        type: type,
+        channel: channel,
         messageListener: messageListener
       });
 
       var unsubscribe = function unsubscribe() {
-        _this5.off(type, messageListener);
+        _this5.off(channel, messageListener);
       };
 
       return unsubscribe;
     }
     /**
      * 移除事件监听器
-     * @param {监听事件类型} type
+     * @param {监听事件} channel
      * @param {监听器属性} messageListener 不传则移除对应事件全部监听器，可指定 callback 或 id 进行移除
      */
 
   }, {
     key: "off",
-    value: function off(type, arg) {
+    value: function off(channel, arg) {
       if (!arg) {
-        delete this.listeners[type];
+        delete this.listeners[channel];
         return;
       }
 
       var messageListener;
 
       if (typeof arg === 'function') {
-        (0, _lodash.remove)(this.listeners[type], function (listener) {
+        (0, _lodash.remove)(this.listeners[channel], function (listener) {
           return listener.callback === arg;
         });
         messageListener = {
@@ -319,16 +319,16 @@ var WebService = /*#__PURE__*/function () {
       } else {
         var callback = arg.callback,
             reqId = arg.reqId;
-        (0, _lodash.remove)(this.listeners[type], function (listener) {
+        (0, _lodash.remove)(this.listeners[channel], function (listener) {
           return listener.callback === callback || listener.reqId && listener.reqId === reqId;
         });
         messageListener = arg;
       }
 
-      if (this.listeners[type].length === 0) delete this.listeners[type];
+      if (this.listeners[channel].length === 0) delete this.listeners[channel];
       var onWebServiceExecOperation = globalThis['onWebServiceExecOperation'];
       onWebServiceExecOperation && onWebServiceExecOperation(this, 'removeListener', {
-        type: type,
+        channel: channel,
         messageListener: messageListener
       });
     }

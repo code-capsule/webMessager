@@ -23,9 +23,9 @@ class ParentIframeMessagerConstructor implements IMessager {
     })
   }
 
-  sendAction({ type, headers, data }) {
+  sendAction({ channel, headers, data }) {
     window.parent === window &&
-      this.iframe.contentWindow.postMessage({ type, headers, data }, '*')
+      this.iframe.contentWindow.postMessage({ channel, headers, data }, '*')
     return true
   }
 }

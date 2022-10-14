@@ -33,7 +33,7 @@ var Logger = /*#__PURE__*/function () {
       } else {
         var ignore = this.option.ignore;
 
-        if (ignore.indexOf(message.type) === -1) {
+        if (ignore.indexOf(message.channel) === -1) {
           console.info(prefixText, message);
         }
       }
