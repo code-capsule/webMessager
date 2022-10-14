@@ -5,7 +5,7 @@
 import IMessager from '../IMessager'
 
 const WEBVIEW_API = 'webviewExtends'
-class WebviewMessager implements IMessager {
+class WebviewMessagerConstructor implements IMessager {
   private send: Function
   public onready: Function
   constructor() {
@@ -55,4 +55,4 @@ class WebviewMessager implements IMessager {
   }
 }
 
-export { WebviewMessager }
+export const WebviewMessager = WebviewMessagerConstructor

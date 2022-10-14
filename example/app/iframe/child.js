@@ -33,7 +33,7 @@ function initIframeWebService() {
 function initBtn() {
   createBtn('send message to parent', () => {
     iframeWebService.send({
-      type: 'childSendToParent',
+      channel: 'childSendToParent',
       data: {
         body: {
           text: 'I am child send',
@@ -44,7 +44,7 @@ function initBtn() {
 
   createBtn('request message to parent', async () => {
     const result = await iframeWebService.request({
-      type: 'requestToParent',
+      channel: 'requestToParent',
       data: {
         body: {
           text: 'I am child request',

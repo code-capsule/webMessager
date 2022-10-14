@@ -38,7 +38,7 @@ class WebService {
   //  */
   // async fetchServices(): Promise<Array<string>> {
   //     const response  = await this.request({
-  //         type: this.messager.getCheckServiceType(),
+  //         channel: this.messager.getCheckServiceType(),
   //     });
   //     this.services = response.data.body.functions;
   //     return this.services;
@@ -46,11 +46,11 @@ class WebService {
 
   // /**
   //  * 检测服务是否可用
-  //  * @param {string} type 服务类型
+  //  * @param {string} channel 服务类型
   //  *
   //  */
-  // checkServiceAvailable(type) {
-  //     return this.services.indexOf(type) !== -1;
+  // checkServiceAvailable(channel) {
+  //     return this.services.indexOf(channel) !== -1;
   // }
 
   /**
@@ -68,10 +68,10 @@ class WebService {
    * 处理平台发送给webview的消息
    */
   handleReceiveMessage(message: Message) {
-    const { type, headers } = message
+    const { channel, headers } = message
 
     this.logger.logMessage('receive message', message)
-    const eventListeners = this.listeners[type]
+    const eventListeners = this.listeners[channel]
     if (!eventListeners) {
       return
     }
@@ -84,7 +84,7 @@ class WebService {
           headers: {
             reqId,
           },
-          type,
+          channel,
         })
         this.send(response)
       },
@@ -141,14 +141,14 @@ class WebService {
    */
   send(message: Message | string, body?: object): Message {
     let finalMessage = {
-      type: '',
+      channel: '',
       headers: { reqId: uuid(), mMode: 'push' },
       data: {},
     }
 
     if (typeof message === 'string') {
       merge(finalMessage, {
-        type: message,
+        channel: message,
         data: {
           body,
         },
@@ -157,10 +157,10 @@ class WebService {
       merge(finalMessage, message)
     }
 
-    const { type } = finalMessage
+    const { channel } = finalMessage
 
-    if (!type) {
-      console.error('[webService]message type for sending is not supplied')
+    if (!channel) {
+      console.error('[webService]message channel for sending is not supplied')
       return
     }
 
@@ -191,7 +191,7 @@ class WebService {
       let finalMessage
       if (typeof message === 'string') {
         finalMessage = {
-          type: message,
+          channel: message,
           data: {
             body,
           },
@@ -205,7 +205,7 @@ class WebService {
         mMode: 'request',
       }
       const req = this.send(finalMessage)
-      this.on(finalMessage.type, {
+      this.on(finalMessage.channel, {
         callback: (data: Message) => {
           resolve(data)
         },
@@ -217,13 +217,13 @@ class WebService {
 
   /**
    * 监听事件
-   * @param {string} type 监听事件类型
+   * @param {string} channel 监听的事件名称
    * @param {function} callback 监听器回调函数
    * @param {MessageListener} 完整监听器
    */
-  on(type: string, arg: Function | MessageListener) {
-    if (!this.listeners[type]) {
-      this.listeners[type] = []
+  on(channel: string, arg: Function | MessageListener) {
+    if (!this.listeners[channel]) {
+      this.listeners[channel] = []
     }
 
     let messageListener: MessageListener
@@ -238,34 +238,34 @@ class WebService {
       messageListener = arg
     }
 
-    this.listeners[type].push(messageListener)
+    this.listeners[channel].push(messageListener)
 
     const onWebServiceExecOperation = globalThis['onWebServiceExecOperation']
     onWebServiceExecOperation &&
       onWebServiceExecOperation(this, 'addListener', {
-        type,
+        channel,
         messageListener,
       })
 
     const unsubscribe = () => {
-      this.off(type, messageListener)
+      this.off(channel, messageListener)
     }
     return unsubscribe
   }
 
   /**
    * 移除事件监听器
-   * @param {监听事件类型} type
+   * @param {监听事件} channel
    * @param {监听器属性} messageListener 不传则移除对应事件全部监听器，可指定 callback 或 id 进行移除
    */
-  off(type: string, arg: Function | MessageListener) {
+  off(channel: string, arg: Function | MessageListener) {
     if (!arg) {
-      delete this.listeners[type]
+      delete this.listeners[channel]
       return
     }
     let messageListener
     if (typeof arg === 'function') {
-      remove(this.listeners[type], (listener: MessageListener) => {
+      remove(this.listeners[channel], (listener: MessageListener) => {
         return listener.callback === arg
       })
       messageListener = {
@@ -274,7 +274,7 @@ class WebService {
     } else {
       const { callback, reqId } = arg
 
-      remove(this.listeners[type], (listener: MessageListener) => {
+      remove(this.listeners[channel], (listener: MessageListener) => {
         return (
           listener.callback === callback ||
           (listener.reqId && listener.reqId === reqId)
@@ -283,12 +283,12 @@ class WebService {
       messageListener = arg
     }
 
-    if (this.listeners[type].length === 0) delete this.listeners[type]
+    if (this.listeners[channel].length === 0) delete this.listeners[channel]
 
     const onWebServiceExecOperation = globalThis['onWebServiceExecOperation']
     onWebServiceExecOperation &&
       onWebServiceExecOperation(this, 'removeListener', {
-        type,
+        channel,
         messageListener,
       })
   }

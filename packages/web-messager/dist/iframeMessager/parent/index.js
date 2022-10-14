@@ -38,11 +38,11 @@ var ParentIframeMessagerConstructor = /*#__PURE__*/function () {
   }, {
     key: "sendAction",
     value: function sendAction(_ref) {
-      var type = _ref.type,
+      var channel = _ref.channel,
           headers = _ref.headers,
           data = _ref.data;
       window.parent === window && this.iframe.contentWindow.postMessage({
-        type: type,
+        channel: channel,
         headers: headers,
         data: data
       }, '*');

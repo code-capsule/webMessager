@@ -34,11 +34,11 @@ var ChildIframeMessagerConstructor = /*#__PURE__*/function () {
   }, {
     key: "sendAction",
     value: function sendAction(_ref) {
-      var type = _ref.type,
+      var channel = _ref.channel,
           headers = _ref.headers,
           data = _ref.data;
       window.parent !== window && window.parent.postMessage({
-        type: type,
+        channel: channel,
         headers: headers,
         data: data
       }, '*');
