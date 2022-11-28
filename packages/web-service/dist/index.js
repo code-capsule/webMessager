@@ -19,9 +19,9 @@ var _lodash = require("lodash");
 
 var _logger = _interopRequireDefault(require("./logger"));
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 var WebService = /*#__PURE__*/function () {
   function WebService(serviceOption) {
@@ -95,7 +95,7 @@ var WebService = /*#__PURE__*/function () {
 
       var channel = message.channel,
           headers = message.headers;
-      this.logger.logMessage('receive message', message);
+      this.logger.logMessage("receive message", message);
       var eventListeners = this.listeners[channel];
 
       if (!eventListeners) {
@@ -108,7 +108,8 @@ var WebService = /*#__PURE__*/function () {
         end: function end(response) {
           (0, _lodash.merge)(response, {
             headers: {
-              reqId: reqId
+              reqId: reqId,
+              mMode: "reply"
             },
             channel: channel
           });
@@ -152,7 +153,13 @@ var WebService = /*#__PURE__*/function () {
     value: function _handleNormalListeners(eventListeners, ctx) {
       var headers = ctx.headers,
           data = ctx.data;
-      var reqId = headers.reqId;
+      var reqId = headers.reqId,
+          mMode = headers.mMode;
+
+      if (mMode === "reply") {
+        return;
+      }
+
       eventListeners.forEach(function (listener) {
         if (!listener.reqId) {
           listener.callback && listener.callback(data, ctx);
@@ -173,15 +180,15 @@ var WebService = /*#__PURE__*/function () {
     key: "send",
     value: function send(message, body) {
       var finalMessage = {
-        channel: '',
+        channel: "",
         headers: {
           reqId: (0, _uuid.default)(),
-          mMode: 'push'
+          mMode: "push"
         },
         data: {}
       };
 
-      if (typeof message === 'string') {
+      if (typeof message === "string") {
         (0, _lodash.merge)(finalMessage, {
           channel: message,
           data: {
@@ -195,7 +202,7 @@ var WebService = /*#__PURE__*/function () {
       var channel = finalMessage.channel;
 
       if (!channel) {
-        console.error('[webService]message channel for sending is not supplied');
+        console.error("[webService]message channel for sending is not supplied");
         return;
       }
 
@@ -205,9 +212,9 @@ var WebService = /*#__PURE__*/function () {
         this.retryQueue.push(finalMessage);
         this.logger.logMessage("receiver is not ready, request will wait and resend", finalMessage);
       } else {
-        var onWebServiceExecOperation = globalThis['onWebServiceExecOperation'];
-        onWebServiceExecOperation && onWebServiceExecOperation(this, 'sendAction', finalMessage);
-        this.logger.logMessage('send message', finalMessage);
+        var onWebServiceExecOperation = globalThis["onWebServiceExecOperation"];
+        onWebServiceExecOperation && onWebServiceExecOperation(this, "sendAction", finalMessage);
+        this.logger.logMessage("send message", finalMessage);
       }
 
       return finalMessage;
@@ -226,7 +233,7 @@ var WebService = /*#__PURE__*/function () {
       return new Promise(function (resolve, reject) {
         var finalMessage;
 
-        if (typeof message === 'string') {
+        if (typeof message === "string") {
           finalMessage = {
             channel: message,
             data: {
@@ -238,7 +245,7 @@ var WebService = /*#__PURE__*/function () {
         }
 
         finalMessage.headers = _objectSpread(_objectSpread({}, finalMessage.headers), {}, {
-          mMode: 'request'
+          mMode: "request"
         });
 
         var req = _this4.send(finalMessage);
@@ -270,10 +277,10 @@ var WebService = /*#__PURE__*/function () {
 
       var messageListener;
 
-      if (typeof arg === 'function') {
+      if (typeof arg === "function") {
         messageListener = {
           callback: arg,
-          reqId: '',
+          reqId: "",
           once: false
         };
       } else {
@@ -281,8 +288,8 @@ var WebService = /*#__PURE__*/function () {
       }
 
       this.listeners[channel].push(messageListener);
-      var onWebServiceExecOperation = globalThis['onWebServiceExecOperation'];
-      onWebServiceExecOperation && onWebServiceExecOperation(this, 'addListener', {
+      var onWebServiceExecOperation = globalThis["onWebServiceExecOperation"];
+      onWebServiceExecOperation && onWebServiceExecOperation(this, "addListener", {
         channel: channel,
         messageListener: messageListener
       });
@@ -309,7 +316,7 @@ var WebService = /*#__PURE__*/function () {
 
       var messageListener;
 
-      if (typeof arg === 'function') {
+      if (typeof arg === "function") {
         (0, _lodash.remove)(this.listeners[channel], function (listener) {
           return listener.callback === arg;
         });
@@ -326,8 +333,8 @@ var WebService = /*#__PURE__*/function () {
       }
 
       if (this.listeners[channel].length === 0) delete this.listeners[channel];
-      var onWebServiceExecOperation = globalThis['onWebServiceExecOperation'];
-      onWebServiceExecOperation && onWebServiceExecOperation(this, 'removeListener', {
+      var onWebServiceExecOperation = globalThis["onWebServiceExecOperation"];
+      onWebServiceExecOperation && onWebServiceExecOperation(this, "removeListener", {
         channel: channel,
         messageListener: messageListener
       });
@@ -336,8 +343,8 @@ var WebService = /*#__PURE__*/function () {
     key: "removeAllListeners",
     value: function removeAllListeners() {
       this.listeners = new Map();
-      var onWebServiceExecOperation = globalThis['onWebServiceExecOperation'];
-      onWebServiceExecOperation && onWebServiceExecOperation(this, 'removeAllListener');
+      var onWebServiceExecOperation = globalThis["onWebServiceExecOperation"];
+      onWebServiceExecOperation && onWebServiceExecOperation(this, "removeAllListener");
     }
   }]);
   return WebService;

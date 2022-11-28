@@ -7,15 +7,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
-
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
 
 var _webService = _interopRequireDefault(require("@codecapsule/web-service"));
 
 var _webMessager = require("@codecapsule/web-messager");
 
-var IFrameWebService = /*#__PURE__*/(0, _createClass2.default)(function IFrameWebService(props) {
+var IFrameWebService = function IFrameWebService(props) {
   (0, _classCallCheck2.default)(this, IFrameWebService);
   var messagerType = props.messagerType,
       iframe = props.iframe;
@@ -35,7 +33,8 @@ var IFrameWebService = /*#__PURE__*/(0, _createClass2.default)(function IFrameWe
         messager: childIframeMessager
       });
   }
-});
+};
+
 var webService;
 
 var _default = function _default(props) {
